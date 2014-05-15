@@ -19,7 +19,9 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('welcome_message');
+		$conteudo = $this->load->view('cardapio/index', false, true);
+
+		$this->template->load('private', $conteudo, null, null, null); // carrega a pagina inicial
 	}
 }
 
