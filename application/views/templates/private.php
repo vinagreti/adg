@@ -45,15 +45,15 @@
     padding-top: 0;
     margin-bottom:10px;
 
-/* IE9 SVG, needs conditional override of 'filter' to 'none' */
-background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzhmYzQwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjklIiBzdG9wLWNvbG9yPSIjOGZjNDAwIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzhmYzQwMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2dyYWQtdWNnZy1nZW5lcmF0ZWQpIiAvPgo8L3N2Zz4=);
-background: -moz-linear-gradient(left, rgba(143,196,0,0) 0%, rgba(143,196,0,0) 9%, rgba(143,196,0,1) 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(143,196,0,0)), color-stop(9%,rgba(143,196,0,0)), color-stop(100%,rgba(143,196,0,1))); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(left, rgba(143,196,0,0) 0%,rgba(143,196,0,0) 9%,rgba(143,196,0,1) 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(left, rgba(143,196,0,0) 0%,rgba(143,196,0,0) 9%,rgba(143,196,0,1) 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(left, rgba(143,196,0,0) 0%,rgba(143,196,0,0) 9%,rgba(143,196,0,1) 100%); /* IE10+ */
-background: linear-gradient(to right, rgba(143,196,0,0) 0%,rgba(143,196,0,0) 9%,rgba(143,196,0,1) 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#008fc400', endColorstr='#8fc400',GradientType=1 ); /* IE6-8 */
+    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzhmYzQwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjklIiBzdG9wLWNvbG9yPSIjOGZjNDAwIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzhmYzQwMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2dyYWQtdWNnZy1nZW5lcmF0ZWQpIiAvPgo8L3N2Zz4=);
+    background: -moz-linear-gradient(left, rgba(143,196,0,0) 0%, rgba(143,196,0,0) 9%, rgba(143,196,0,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(143,196,0,0)), color-stop(9%,rgba(143,196,0,0)), color-stop(100%,rgba(143,196,0,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left, rgba(143,196,0,0) 0%,rgba(143,196,0,0) 9%,rgba(143,196,0,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left, rgba(143,196,0,0) 0%,rgba(143,196,0,0) 9%,rgba(143,196,0,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left, rgba(143,196,0,0) 0%,rgba(143,196,0,0) 9%,rgba(143,196,0,1) 100%); /* IE10+ */
+    background: linear-gradient(to right, rgba(143,196,0,0) 0%,rgba(143,196,0,0) 9%,rgba(143,196,0,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#008fc400', endColorstr='#8fc400',GradientType=1 ); /* IE6-8 */
 }
 
 .img-button{
@@ -64,7 +64,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#008fc400', e
     opacity: 0.5;
 }
 
-body{
+.font-papyrus-fantasy{
     font-family: Papyrus, fantasy;
     font-weight: bold;
 }
@@ -84,7 +84,7 @@ body{
 <body>
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
+    <div class="jumbotron font-papyrus-fantasy">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-2">
@@ -105,6 +105,7 @@ body{
             <div class="col-md-3" role="main">
 
                 <div class="sidebar-nav">
+
                     <div class="navbar navbar-default" role="navigation">
                         <div class="navbar-header">
                             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
@@ -115,9 +116,9 @@ body{
                             </button>
                             <span class="visible-xs navbar-brand">Sidebar menu</span>
                         </div>
-                        <div class="navbar-collapse collapse sidebar-navbar-collapse">
+                        <div class="navbar-collapse collapse sidebar-navbar-collapse font-papyrus-fantasy">
                             <ul class="nav navbar-nav">
-                                <li class="active"><a href="">Bem vindo</a></li>
+                                <li class="active"><a href="<?=base_url()?>">Bem vindo</a></li>
                                 <li><a href="quemsomos">Quem somos</a></li>
                                 <li><a href="cardapio">Cardápio</a></li>
                                 <li><a href="contato">Fale conosco</li>
