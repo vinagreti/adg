@@ -96,7 +96,7 @@
                 </div>
                 <div class="col-md-10">
                     <h1>Arte del Gusto</h1>
-                    <p>Sinta-se a vontade para conhecer nosso atelier do sabor.</p>
+                    <p>...atelier do sabor.</p>
                 </div>
             </div>
         </div>
