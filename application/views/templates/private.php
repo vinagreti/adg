@@ -67,7 +67,11 @@
 .font-papyrus-fantasy{
     font-family: Papyrus, fantasy;
     font-weight: bold;
+    font-size: 17px;
 }
+
+.fa-facebook-square{color:#555555;}
+.fa-facebook-square:hover{color:#46629E;}
 </style>
 
     <!-- Carrega css dinamicamente -->
@@ -102,7 +106,7 @@
 
         <div class="row">
 
-            <div class="col-md-3" role="main">
+            <div class="col-md-2" role="main">
 
                 <div class="sidebar-nav">
 
@@ -118,38 +122,41 @@
                         </div>
                         <div class="navbar-collapse collapse sidebar-navbar-collapse font-papyrus-fantasy">
                             <ul class="nav navbar-nav">
-                                <li class="active"><a href="<?=base_url()?>">Bem vindo</a></li>
-                                <li><a href="quemsomos">Quem somos</a></li>
-                                <li><a href="cardapio">Cardápio</a></li>
-                                <li><a href="contato">Fale conosco</li>
+                                <li <?php if($this->router->fetch_class() == 'welcome') echo 'class="active"'; ?> ><a href="<?=base_url()?>">Bem vindo</a></li>
+                                <li <?php if($this->router->fetch_class() == 'quemsomos') echo 'class="active"'; ?>><a href="quemsomos">Quem somos</a></li>
+                                <li <?php if($this->router->fetch_class() == 'cardapio') echo 'class="active"'; ?>><a href="cardapio">Cardápio</a></li>
+                                <li <?php if($this->router->fetch_class() == 'contato') echo 'class="active"'; ?>><a href="contato">Fale conosco</a></li>
                             </ul>
                         </div><!--/.nav-collapse -->
 
-                        <ul class="nav navbar-nav"><li><a href="https://www.fb.com/artedgusto" target="_blank"><i class="fa fa-facebook-square fa-3x" style="color:#46629E;"></i></a></li></ul>
-
-                        <address class="text-center">
-                            Capivari de Baixo - SC - 88745-000<br>
-                            +55 48 36234246</br>
-                            <a href="mailto:contato@artedelgusto.com.br">contato@artedelgusto.com.br</a>
-                        </address>
                     </div>
 
                 </div>
 
             </div>
 
-            <div class="col-md-9" role="main">
+            <div class="col-md-10" role="main">
                 <?= $conteudo ?>
             </div>
 
         </div>
 
-    </div>
+        <hr>
 
-</div> <!-- /container -->
+        <footer>
+            <address class="text-center">
+                <div class="social-medias">
+                    <a href="https://www.fb.com/artedgusto" target="_blank"><i class="fa fa-facebook-square fa-3x"></i></a>
+                </div>
+                Capivari de Baixo - SC - 88745-000<br>
+                +55 48 36234246</br>
+                <a href="mailto:contato@artedelgusto.com.br">contato@artedelgusto.com.br</a>
+            </address>
+        </footer>
+    </div> <!-- /container -->
 
 
-<!-- Bootstrap core JavaScript
+    <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="<?=base_url()?>assets/third-party/JQuery/jquery-1.10.2.js"></script>
