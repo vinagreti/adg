@@ -148,9 +148,8 @@
                 <div class="social-medias">
                     <a href="https://www.fb.com/artedgusto" target="_blank"><i class="fa fa-facebook-square fa-3x"></i></a>
                 </div>
-                Capivari de Baixo - SC - 88745-000<br>
-                +55 48 36234246</br>
-                <a href="mailto:contato@artedelgusto.com.br">contato@artedelgusto.com.br</a>
+                <p>Capivari de Baixo - SC</p>
+                <p><a href="mailto:contato@artedelgusto.com.br">contato@artedelgusto.com.br</a></p>
             </address>
         </footer>
     </div> <!-- /container -->
@@ -161,6 +160,9 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="<?=base_url()?>assets/third-party/JQuery/jquery-1.10.2.js"></script>
     <script src="<?=base_url()?>assets/third-party/twitter-bootstrap3/js/bootstrap.min.js"></script>
+
+    <!-- Define a url do root_path -->
+    <script type="text/javascript"> var base_url = "<?=base_url()?>"</script>
     <!-- Carrega scripts dinamicamente -->
     <?php if( isset($arquivos_js) ) foreach( $arquivos_js as $key => $script ) echo '<script src="'.base_url().'assets/'.$script.'.js"></script>'; ?>
 </body>
