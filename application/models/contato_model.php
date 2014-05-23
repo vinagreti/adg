@@ -19,7 +19,7 @@ class Contato_Model extends CI_Model {
 
         $this->load->library('email'); // carrega a biblioteca email
         $this->email->from('no-reply@artedelgusto.com.br', "Arte del Gusto" ); // define o(s) remetente(S)
-        $this->email->to( 'denisefaccin@gmail.com', 'bruno@tzadi.com' );  // define o(s) destinatário(s)
+        $this->email->to( 'denisefaccin@gmail.com', 'bruno@tzadi.com', 'bruno.joao@ostec.com.br' );  // define o(s) destinatário(s)
         $this->email->subject('Contato recebido'); // define o assunto
         $this->email->message( $mensagem );  // insere a mensagem
         $this->email->send(); // envia o email
