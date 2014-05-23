@@ -1,19 +1,19 @@
 <?php
 
-    $email_conf["smtp_host"] = 'smtp.sendgrid.net';
+    $config["smtp_host"] = 'smtp.sendgrid.net';
 
-    $email_conf["smtp_user"] = 'tzadi';
+    $config["smtp_user"] = 'tzadi';
 
-    $email_conf["smtp_pass"] = 'Dublin2010ireland';
+    $config["smtp_pass"] = 'Dublin2010ireland';
 
-    $email_conf['protocol'] = 'smtp';
+    $config['protocol'] = 'smtp';
 
-    $email_conf['smtp_port'] = 587;
+    $config['smtp_port'] = 587;
+config
+    $config['mailtype'] = 'html';
 
-    $email_conf['mailtype'] = 'html';
+    $config['charset'] = 'utf-8';
 
-    $email_conf['charset'] = 'utf-8';
-
-    $email_conf['wordwrap'] = TRUE;
+    $config['wordwrap'] = TRUE;
 
 ?>
