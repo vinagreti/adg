@@ -9,7 +9,7 @@
     $config['protocol'] = 'smtp';
 
     $config['smtp_port'] = 587;
-config
+
     $config['mailtype'] = 'html';
 
     $config['charset'] = 'utf-8';
