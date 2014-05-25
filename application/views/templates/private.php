@@ -132,6 +132,10 @@
                                 <li <?php if($this->router->fetch_class() == 'quemsomos') echo 'class="active"'; ?>><a href="quemsomos">Quem somos</a></li>
                                 <li <?php if($this->router->fetch_class() == 'cardapio') echo 'class="active"'; ?>><a href="cardapio">Cardápio</a></li>
                                 <li <?php if($this->router->fetch_class() == 'contato') echo 'class="active"'; ?>><a href="contato">Fale conosco</a></li>
+                                <li <?php if($this->router->fetch_class() == 'clientes') echo 'class="active"'; ?>><a href="clientes">Clientes</a></li>
+                                <li <?php if($this->router->fetch_class() == 'fornecedores') echo 'class="active"'; ?>><a href="fornecedores">Fornecedores</a></li>
+                                <li <?php if($this->router->fetch_class() == 'produtos') echo 'class="active"'; ?>><a href="produtos">Produtos</a></li>
+                                <li <?php if($this->router->fetch_class() == 'lancamentos') echo 'class="active"'; ?>><a href="lancamentos">Lançamentos</a></li>
                             </ul>
                         </div><!--/.nav-collapse -->
 

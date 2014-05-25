@@ -5,7 +5,8 @@ class Contato extends CI_Controller {
     public function index()
     {
 
-        $javascript_files = array('js/contato/contato');
+        $javascript_files = array('js/contato');
+
         $conteudo = $this->load->view('contato/index', false, true);
 
         $this->template->load('private', $conteudo, $javascript_files, null, null); // carrega a pagina inicial
