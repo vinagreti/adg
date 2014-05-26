@@ -1,7 +1,11 @@
 <h1><small>Lançamentos</small></h1>
 
 <div class="table-responsive">
-    <table class="bostable table table-hover table-condensed table-stripped" id="tabelaLancamentos" data-url="<?=base_url()?>lancamentos/json">
+    <table class="bostable table table-hover table-condensed table-stripped" id="tabelaLancamentos" data-url="<?=base_url()?>lancamentos">
+        <caption>
+            caption definido na view
+            <span class="pull-left"><button class="btn btn-link"><i class="fa fa-plus fa-2x color-success"></i></button></span>
+        </caption>
         <thead>
             <th ordenavel>Tipo</th>
             <th ordenavel>Qtd</th>
@@ -30,10 +34,20 @@
                 <td class="realizado"></td>
                 <td class="data"></td>
                 <td><span class="menuLinhaTabela">
-                    <button type="button" class="btn btn-primary btn-xs editarUsuario" data-toggle="tooltip" title="Editar usuário"><i class="fa fa-edit fa-1"></i></button>
-                    <button type="button" class="btn btn-danger btn-xs deletarUsuario" data-toggle="tooltip" title="Excluir usuário"><i class="fa fa-trash-o fa-1"></i></button>
+                    <button type="button" class="btn btn-info btn-xs editarUsuario" data-crud-read="<?=base_url()?>lancamentos/readTemplate" data-toggle="tooltip" title="Visualizar lançamento"><i class="fa fa-expand fa-1"></i></button>
+                    <button type="button" class="btn btn-primary btn-xs editarUsuario" data-crud-update="<?=base_url()?>lancamentos/updateTemplate" data-toggle="tooltip" title="Editar lançamento"><i class="fa fa-edit fa-1"></i></button>
+                    <button type="button" class="btn btn-danger btn-xs deletarUsuario" data-crud-drop="<?=base_url()?>lancamentos/dropTemplate" data-toggle="tooltip" title="Excluir lançamento"><i class="fa fa-trash-o fa-1"></i></button>
                 </span></td>
             </tr>
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="12">
+                    <p class="text-center">
+                        rodapé definido na view
+                    </p>
+                </td>
+            </tr>
+        </tfoot>
     </table>
 </div>

@@ -5,11 +5,19 @@ class Lancamentos extends CI_Controller {
     public function index()
     {
 
-        $javascript_files = array('js/lancamentos', 'third-party/bostable/bostable');
+        if (!$this->input->is_ajax_request()) {
 
-        $conteudo = $this->load->view('lancamentos/index', false, true);
+            $javascript_files = array('js/lancamentos', 'third-party/bostable/bostable');
 
-        $this->template->load('private', $conteudo, $javascript_files, null, null); // carrega a pagina inicial
+            $conteudo = $this->load->view('lancamentos/index', false, true);
+
+            $this->template->load('private', $conteudo, $javascript_files, null, null); // carrega a pagina inicial
+
+        } else {
+
+            $this->json();
+
+        }
     }
 
     public function json(){
@@ -32,9 +40,40 @@ class Lancamentos extends CI_Controller {
 
         }
 
+        // usleep(rand(1000000,30000000));
+
         header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
 
         echo json_encode( $res ); // responde
     }
 
+    public function createForm(){
+
+        $res = $this->load->view('lancamentos/createForm', false, true);
+
+        header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
+
+        echo json_encode( $res ); // responde
+
+    }
+
+    public function updateForm(){
+
+        $res = $this->load->view('lancamentos/updateForm', false, true);
+
+        header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
+
+        echo json_encode( $res ); // responde
+
+    }
+
+    public function readTemplate(){
+
+        $res = $this->load->view('lancamentos/readTemplate', false, true);
+
+        header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
+
+        echo json_encode( $res ); // responde
+
+    }
 }

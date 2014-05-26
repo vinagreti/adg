@@ -3,31 +3,60 @@
 // Author: Bruno da Silva João
 // https://github.com/vinagreti
 
-// definindo como api o jquery
+// definindo como api do jquery
 (function( $ ){
 
     $.fn.bostable = function() {
 
-        var varrerTela = false; // fazer varredura na tela ao iniciar a classe
-
         var bostables = {}; // tabelas no escopo da tela
 
-        var bostableClass = function( tabela ) {
+        // MAPEIA A TELA EM BUSCA DAS TABELAS COM CLASSE BOSTABLE
+        // ================================
+        var telaMapeada = false; // indica se a tela já foi mapeada
 
-            // instancia a si mesmo para poder ser utilizado dentro de funções
-            var self = this;
+        if( telaMapeada === false ){ // se a tela ainda não foi mapeada
 
-            var total = 0;
-            var pagina = 1;
-            var por_pagina = 30;
-            var base_url_tabela = tabela.attr("data-url");
+            // identifica todas as tabelas com classe bostable do documento
+            var tabelas = $(document).find("table.bostable");
+
+            // para cada tabela encontrada
+            $.each( tabelas, function(i, tabela ){
+
+                bostables[$(tabela).attr('id')] = new bostableClass( $(tabela) );
+
+            });
+
+            telaMapeada = true;
+
+        }
+
+        // CLASSE BOSTABLE
+        // ================================
+        function bostableClass( tabela ) {
+
+            var self = this; // instancia a si mesmo para poder ser referenciado dentro de funções
+            var total = 0; // total de iténs encontrados
+            var pagina = 1; // número da página atual
+            var por_pagina = 30; // númerod e itens por página
+            var base_url_tabela = tabela.attr("data-url").replace(/\/\s*$/, "")+"/"; // uri base da tabela (insere / no fim da string)
+            var rawData = {}; // ítens da tabela
 
             // aplica a classe de ordenação na
             // $(function(){ tabela.tablesorter(); });
 
+            // MAPEIA A TABELA
+            // ======================
             var elementoLinha = tabela.find("tbody").find("tr").clone(); // copia a estrutura HTML da linha
 
             tabela.find("tbody").find("tr").remove(); // remove a linha modelo
+
+            var elementoCaption = (tabela.find("caption").length > 0) ? tabela.find("caption").clone() : $('<caption>'); // copia a estrutura HTML do caption
+
+            tabela.find("caption").remove(); // remove o caption
+
+            var elementoTfooter = (tabela.find("tfoot").length > 0) ? tabela.find("tfoot").clone() : $('<tfoot>'); // copia a estrutura HTML do tfoot
+
+            tabela.find("tfoot").remove(); // remove o tfoot
 
             $.each( tabela.find("th"), function( index, th ){ // configura o cabeçalho da tabela
 
@@ -39,12 +68,53 @@
 
                 }
 
-            } );
+            });
 
-            var rawData = {};
+/*            createButtonHTML.on('click', function( e ){
 
-            // atualiza a barra de paginação
-            self.atualizarPaginacao = function(){
+                self.abrirCreateform();
+
+            })*/
+
+            // PEGA OS DADOS NA API REST
+            // ================================
+            function carrega( page, per_page ){
+
+                page = page ? page : pagina;
+
+                per_page = per_page ? per_page : por_pagina;
+
+                footer('<p class="text-center"><i class="fa fa-spin fa-circle-o-notch fa-2x"></i></p>');
+
+                $.get( base_url_tabela+'?page='+page+'&per_page='+per_page )
+                .success(function( res, textStatus, request ){
+
+                    rawData['1'] = res;
+
+                    total = request.getResponseHeader('X-Total-Count');
+
+                    self.atualizarPaginacao();
+
+                    $.each( res, function( index, obj ){
+
+                        self.inserirLinha( obj );
+
+                    });
+
+                })
+                .fail(function( res ){
+
+                    footer( res.msg );
+
+                });
+
+            };
+            carrega();
+            self.carrega = carrega;
+
+            // ATUALIZA A BARRA DE PAGINAÇÃO
+            // ================================
+            function atualizarPaginacao(){
 
                 if(total == 0)
                     tabela.find("tfoot").html(defaultFoot);
@@ -75,11 +145,11 @@
 
                         paginacao += '</ul></div>';
 
-                        self.footer( $(paginacao ) );
+                        footer( $(paginacao ) );
 
                     } else {
 
-                        self.footer( '' );
+                        footer( '' );
 
                     }
 
@@ -87,39 +157,48 @@
 
                     var posicaoSegundoItem = (posicaoPrimeiroItem + por_pagina - 1) > total ? total : posicaoPrimeiroItem + por_pagina -1;
 
-                    self.caption("<small class='text-info'>Mostrando do " + posicaoPrimeiroItem + "&ordm até o " + posicaoSegundoItem + "&ordm de " + total + " registro(s) encontrado(s).</small>"+'<span class="pull-left"><button class="btn btn-link"><i class="fa fa-plus fa-2x color-success"></i></button></span>');
+                    var totalresumeHTML = $(document.createElement('span')).html("Mostrando do " + posicaoPrimeiroItem + "&ordm até o " + posicaoSegundoItem + "&ordm de " + total + " registro(s) encontrado(s).");
+
+                    var captionContent = $(document.createElement('small')).addClass('text-info').append( totalresumeHTML );
+
+                    self.caption( captionContent );
 
                 }
 
             }
+            self.atualizarPaginacao = atualizarPaginacao;
 
-            self.footer = function( conteudo ){
+            // ATUALIZA O RODAPÉ
+            // ================================
+            function footer( conteudo ){
 
-                if( ! tabela.find("tfoot").length )
-                    tabela.append($('<tfoot>'));
+                tabela.find('tfoot').remove();
 
-                tabela
-                    .find("tfoot")
-                        .html( $('<tr>')
-                                    .html( $('<td>')
-                                        .attr('colspan',elementoLinha.find('td').length)
-                                        .html( conteudo )
-                                    )
-                                );
+                var footer = elementoTfooter.clone();
 
-            }
+                content = $('<tr>').html( $('<td>').attr('colspan',elementoLinha.find('td').length).html( conteudo ) );
 
-            self.caption = function( content ){
-
-                if( ! tabela.find("caption").length )
-                    tabela.prepend($('<caption>'));
-
-                tabela.find("caption").html( content );
+                tabela.append( footer.append( content ) );
 
             }
+            self.footer = footer;
 
-            // insere uma linha na tabela tendo como base um objeto JSON
-            self.inserirLinha = function( objeto, pos, highlight ){
+            // ATUALIZA O TITULO DA TABELA
+            // ================================
+            function caption( content ){
+
+                var caption = elementoCaption.clone();
+
+                tabela.find('caption').remove();
+
+                tabela.prepend( caption.append( content ) );
+
+            }
+            self.caption = caption;
+
+            // INSERE UMA LINHA NA TABELA TENDO COMO BASE UM OBJETO JSON
+            // ================================
+            function inserirLinha( objeto, pos, highlight ){
 
                 // define a posição da nova linha
                 var pos = ( pos === "append" || pos === "prepend" ) ? pos : "append";
@@ -175,9 +254,11 @@
                 self.atualizaOrdenacao();
 
             };
+            self.inserirLinha = inserirLinha;
 
-            // remove uma linha da tabela tendo como referência seu identificador (id)
-            self.removerLinha = function( id ){
+            // REMOVE UMA LINHA DA TABELA TENDO COMO REFERÊNCIA SEU IDENTIFICADOR (ID)
+            // ================================
+            function removerLinha( id ){
 
                 // instancia a linha da tabela
                 var linha = tabela.find( "#" + id );
@@ -197,17 +278,22 @@
                 });
 
             };
+            self.removerLinha = removerLinha;
 
-            self.atualizaOrdenacao = function(){
+            // ATUALIZA A ORDENAÇÃO DA TABELA
+            // ================================
+            function atualizaOrdenacao(){
 
                 var resort = true, callback = function(table){};
 
                 tabela.trigger("update", [resort, callback]);
 
             };
+            self.atualizaOrdenacao = atualizaOrdenacao;
 
-            // insere uma linha na tabela tendo como base um objeto JSON
-            self.editarLinha = function( objeto ){
+            // INSERE UMA LINHA NA TABELA TENDO COMO BASE UM OBJETO JSON
+            // ================================
+            function editarLinha( objeto ){
 
                 // instancia a linha da tabela
                 var linha = tabela.find("#"+objeto.id);
@@ -247,8 +333,11 @@
                 self.atualizaOrdenacao();
 
             };
+            self.editarLinha = editarLinha;
 
-            self.limpar = function(){
+            // LIMPA A TABELA
+            // ================================
+            function limpar(){
 
                 tabela.find("tbody").empty();
 
@@ -257,53 +346,24 @@
                 tabela.find("caption").remove();
 
             }
+            self.limpar = limpar;
 
-            // pega os dados na api
-            self.carrega = function( pagina, por_pagina ){
-
-                self.footer( $('<p>').addClass('text-center').html( $('<i>').addClass('fa fa-spin fa-circle-o-notch ') ) );
+            // ABRE O FORMULÁRIO PARA CRIAÇÃO DE NOVO ITEM
+            // ================================
+            function abrirCreateform(){
 
                 $.get( base_url_tabela )
-                .success(function( res, textStatus, request ){
-
-                    rawData['1'] = res;
-
-                    total = request.getResponseHeader('X-Total-Count');
-
-                    self.atualizarPaginacao();
-
-                    $.each( res, function( index, obj ){
-
-                        self.inserirLinha( obj );
-
-                    });
-
+                .success(function(res){
+                    console.log(res);
                 })
-                .fail(function( res ){
-
-                    self.footer( res.msg );
-
+                .fail(function(res){
+                    abrirCreateform();
                 });
 
-            }();
+            }
+            self.abrirCreateform = abrirCreateform;
 
         };
-
-        if( varrerTela === false ){ // se foi definida a varredura de tela
-
-            // identifica todas as tabelas com classe bostable do documento
-            var tabelas = $(document).find("table.bostable");
-
-            // para cada tabela encontrada
-            $.each( tabelas, function(i, tabela ){
-
-                bostables[$(tabela).attr('id')] = new bostableClass( $(tabela) );
-
-            });
-
-            varrerTela = true;
-
-        }
 
         return this;
 
