@@ -14,6 +14,7 @@
             <th ordenavel>Desc</th>
             <th ordenavel>Realizado</th>
             <th ordenavel>Data</th>
+            <th class="col-sm-1">Ações</th>
         </thead>
         <tbody>
             <tr>
@@ -28,10 +29,11 @@
                 <td class="descricao"></td>
                 <td class="realizado"></td>
                 <td class="data"></td>
+                <td><span class="menuLinhaTabela">
+                    <button type="button" class="btn btn-primary btn-xs editarUsuario" data-toggle="tooltip" title="Editar usuário"><i class="fa fa-edit fa-1"></i></button>
+                    <button type="button" class="btn btn-danger btn-xs deletarUsuario" data-toggle="tooltip" title="Excluir usuário"><i class="fa fa-trash-o fa-1"></i></button>
+                </span></td>
             </tr>
         </tbody>
-        <tfoot>
-            <td colspan="10" class="text-center">Nenhum lançamento encontrado</td>
-        </tfoot>
     </table>
 </div>

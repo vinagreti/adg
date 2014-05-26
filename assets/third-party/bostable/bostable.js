@@ -29,10 +29,6 @@
 
             tabela.find("tbody").find("tr").remove(); // remove a linha modelo
 
-            var defaultFoot = tabela.find("tfoot").html(); // copia a estrutura HTML do conteudo padrao do footer
-
-            tabela.find("tfoot").empty(); // remove o conteudo padrao do footer
-
             $.each( tabela.find("th"), function( index, th ){ // configura o cabeçalho da tabela
 
                 if (typeof $(th).attr("ordenavel") !== 'undefined' && $(th).attr("ordenavel") !== false) { // se tiverem o atributo "ordenavel"
@@ -45,32 +41,7 @@
 
             } );
 
-            var rawData = [];
-
-            if (typeof tabela.attr("data-url") !== 'undefined' && tabela.attr("data-url") !== false) { // se for passada a url
-
-                $.get( base_url_tabela )
-                .success(function( res, textStatus, request ){
-
-                    total = request.getResponseHeader('X-Total-Count');
-
-                    self.atualizarPaginacao();
-
-                    $.each( res, function( index, obj ){
-
-                        self.inserirLinha( obj );
-
-                    });
-
-                })
-                .fail(function( res ){
-
-                    console.log( res );
-
-                });
-
-
-            }
+            var rawData = {};
 
             // atualiza a barra de paginação
             self.atualizarPaginacao = function(){
@@ -104,34 +75,46 @@
 
                         paginacao += '</ul></div>';
 
-                        if( ! tabela.find("tfoot").length )
-                            tabela.append($('<tfoot>'));
-
-                        tabela
-                            .find("tfoot")
-                                .html( $('<tr>')
-                                            .html( $('<td>')
-                                                .attr('colspan',elementoLinha.find('td').length)
-                                                .html( $(paginacao) )
-                                            )
-                                        );
+                        self.footer( $(paginacao ) );
 
                     } else {
 
-                        tabela.find("tfoot").empty();
+                        self.footer( '' );
 
                     }
-
-                    if( ! tabela.find("caption").length )
-                        tabela.prepend($('<caption>'));
 
                     var posicaoPrimeiroItem = total > 0 ? (pagina * por_pagina) + 1 - por_pagina : 0;
 
                     var posicaoSegundoItem = (posicaoPrimeiroItem + por_pagina - 1) > total ? total : posicaoPrimeiroItem + por_pagina -1;
 
-                    tabela.find("caption").html("<small class='text-info'>Mostrando do " + posicaoPrimeiroItem + "&ordm até o " + posicaoSegundoItem + "&ordm de " + total + " registro(s) encontrado(s).</small>");
+                    self.caption("<small class='text-info'>Mostrando do " + posicaoPrimeiroItem + "&ordm até o " + posicaoSegundoItem + "&ordm de " + total + " registro(s) encontrado(s).</small>"+'<span class="pull-left"><button class="btn btn-link"><i class="fa fa-plus fa-2x color-success"></i></button></span>');
 
                 }
+
+            }
+
+            self.footer = function( conteudo ){
+
+                if( ! tabela.find("tfoot").length )
+                    tabela.append($('<tfoot>'));
+
+                tabela
+                    .find("tfoot")
+                        .html( $('<tr>')
+                                    .html( $('<td>')
+                                        .attr('colspan',elementoLinha.find('td').length)
+                                        .html( conteudo )
+                                    )
+                                );
+
+            }
+
+            self.caption = function( content ){
+
+                if( ! tabela.find("caption").length )
+                    tabela.prepend($('<caption>'));
+
+                tabela.find("caption").html( content );
 
             }
 
@@ -274,6 +257,35 @@
                 tabela.find("caption").remove();
 
             }
+
+            // pega os dados na api
+            self.carrega = function( pagina, por_pagina ){
+
+                self.footer( $('<p>').addClass('text-center').html( $('<i>').addClass('fa fa-spin fa-circle-o-notch ') ) );
+
+                $.get( base_url_tabela )
+                .success(function( res, textStatus, request ){
+
+                    rawData['1'] = res;
+
+                    total = request.getResponseHeader('X-Total-Count');
+
+                    self.atualizarPaginacao();
+
+                    $.each( res, function( index, obj ){
+
+                        self.inserirLinha( obj );
+
+                    });
+
+                })
+                .fail(function( res ){
+
+                    self.footer( res.msg );
+
+                });
+
+            }();
 
         };
 
