@@ -1,30 +1,27 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Lancamentos extends CI_Controller {
+class Lancamentos extends My_Controller {
 
-    public function index()
+    public function index() { $this->rest(); } // inicia o servidor RESTful definido em /application/core/MY_Controller.php
+
+    public function listObjects_html()
     {
 
-        if (!$this->input->is_ajax_request()) {
+        $javascript_files = array('js/lancamentos', 'third-party/bostable/bostable', 'third-party/datepicker/js/bootstrap-datepicker', 'third-party/typeahead/typeahead', 'third-party/typeahead/hogan');
 
-            $javascript_files = array('js/lancamentos', 'third-party/bostable/bostable');
+        $css_files = array('third-party/datepicker/css/datepicker');
 
-            $conteudo = $this->load->view('lancamentos/index', false, true);
+        $conteudo = $this->load->view('lancamentos/index', false, true);
 
-            $this->template->load('private', $conteudo, $javascript_files, null, null); // carrega a pagina inicial
+        $this->template->load('private', $conteudo, $javascript_files, $css_files, null); // carrega a pagina inicial
 
-        } else {
-
-            $this->json();
-
-        }
     }
 
-    public function json(){
+    public function listObjects_json(){
 
         $this->load->model("lancamentos_model");
 
-        $carregarResumo = $this->lancamentos_model->resumo(false, false, false, true);
+        $carregarResumo = $this->lancamentos_model->resumo($_GET, false, false, true);
 
         if( $carregarResumo["sucesso"] ){ // se a consulta ao banco for bem sucedida
 
@@ -47,19 +44,37 @@ class Lancamentos extends CI_Controller {
         echo json_encode( $res ); // responde
     }
 
-    public function createForm(){
+    public function createTemplate(){
 
-        $res = $this->load->view('lancamentos/createForm', false, true);
-
-        header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
-
-        echo json_encode( $res ); // responde
+        $this->load->view('lancamentos/createTemplate', false);
 
     }
 
-    public function updateForm(){
+    public function createObject( $data ){
 
-        $res = $this->load->view('lancamentos/updateForm', false, true);
+        $this->load->model("lancamentos_model");
+
+        $response = $this->lancamentos_model->create( $data );
+
+        if( $response['sucesso'] )
+            redirect(base_url().'lancamentos/?id='.$response['id']);
+
+        else{
+
+            header( "HTTP/1.0 400 ". utf8_decode( $editar["msg"] ) ); // seta o código e a mensagem de erro no cabeçalho da resposta
+
+            header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
+
+            echo json_encode( $response['msg'] ); // responde
+
+        }
+
+
+    }
+
+    public function updateTemplate(){
+
+        $res = $this->load->view('lancamentos/updateTemplate', false, true);
 
         header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
 
@@ -74,6 +89,20 @@ class Lancamentos extends CI_Controller {
         header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
 
         echo json_encode( $res ); // responde
+
+    }
+
+    public function readObject_json(){
+
+        header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
+
+        echo '{"codigo":"1","tipo":"C","data":"12-05-2014","valor_cobrado":"35.00","valor_estimado":"35.00","descricao":"Encomenda para a OSTEC","realizado":"Sim","quantidade":"10","cliente":"Cassio Brodbeck","produto":"Sanduiche de Frango","valor_unidade":"3.50","fornecedor":null}';
+
+    }
+
+    public function readObject_html(){
+
+        $this->readObject_json();
 
     }
 }

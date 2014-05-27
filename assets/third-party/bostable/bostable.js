@@ -39,7 +39,7 @@
             var pagina = 1; // número da página atual
             var por_pagina = 30; // númerod e itens por página
             var base_url_tabela = tabela.attr("data-url").replace(/\/\s*$/, "")+"/"; // uri base da tabela (insere / no fim da string)
-            var rawData = {}; // ítens da tabela
+            var pageData; // ítens da tabela
 
             // aplica a classe de ordenação na
             // $(function(){ tabela.tablesorter(); });
@@ -70,11 +70,74 @@
 
             });
 
-/*            createButtonHTML.on('click', function( e ){
+            // APLICA OS GATILHOS NOS BOTOES DE AÇÕES DE CRUD DAS TABELAS
+            // ================================
+            function aplicarGatilhosTabela(){
 
-                self.abrirCreateform();
+                tabela.find('[data-crud-create]').unbind('click').on('click', function(){
 
-            })*/
+                    var form_url = $(this).attr('data-crud-create');
+
+                    self.abrirCreateform( form_url );
+
+                });
+
+                tabela.find('[data-crud-update]').unbind('click').on('click', function(){
+
+                    var form_url = $(this).attr('data-crud-update');
+
+                    self.abrirUpdateform( form_url );
+
+                });
+
+                tabela.find('[data-crud-read]').unbind('click').on('click', function(){
+
+                    var form_url = $(this).attr('data-crud-read');
+
+                    self.abrirReadform( form_url );
+
+                });
+
+            }
+            self.aplicarGatilhosTabela = aplicarGatilhosTabela;
+
+            // APLICA OS GATILHOS NOS BOTOES DE AÇÕES DE CRUD DOS FORMULÁRIOS
+            // ================================
+            function aplicarGatilhosForm( method ){
+
+                tabela.find('[data-form-action*="close"]').unbind('click').on('click', function(){
+
+                    tabela.html(self.tablePageContent);
+
+                    aplicarGatilhosTabela();
+
+                });
+
+                tabela.find('form').on('submit', function( e ){
+
+                    e.preventDefault();
+
+                    var formData = $(this).serialize();
+
+                    $[method]( base_url_tabela, formData )
+                    .success(function( res ){
+
+                        pageData.push(res);
+
+                        tabela.html(self.tablePageContent);
+
+                        inserirLinha( res );
+
+                        aplicarGatilhosTabela();
+
+                    });
+
+                    return false;
+
+                })
+
+            }
+            self.aplicarGatilhosForm = aplicarGatilhosForm;
 
             // PEGA OS DADOS NA API REST
             // ================================
@@ -89,7 +152,7 @@
                 $.get( base_url_tabela+'?page='+page+'&per_page='+per_page )
                 .success(function( res, textStatus, request ){
 
-                    rawData['1'] = res;
+                    pageData = res;
 
                     total = request.getResponseHeader('X-Total-Count');
 
@@ -100,6 +163,8 @@
                         self.inserirLinha( obj );
 
                     });
+
+                    aplicarGatilhosTabela();
 
                 })
                 .fail(function( res ){
@@ -192,6 +257,8 @@
                 tabela.find('caption').remove();
 
                 tabela.prepend( caption.append( content ) );
+
+                aplicarGatilhosTabela();
 
             }
             self.caption = caption;
@@ -348,13 +415,25 @@
             }
             self.limpar = limpar;
 
+            function showForm( form, method ){
+
+                self.tablePageContent = tabela.html();
+
+                tabela.html($(form));
+
+                aplicarGatilhosForm( method );
+
+            }
+
             // ABRE O FORMULÁRIO PARA CRIAÇÃO DE NOVO ITEM
             // ================================
-            function abrirCreateform(){
+            function abrirCreateform( form_url ){
 
-                $.get( base_url_tabela )
-                .success(function(res){
-                    console.log(res);
+                $.get( form_url )
+                .success(function(form){
+
+                    showForm( form, 'post' );
+
                 })
                 .fail(function(res){
                     abrirCreateform();
@@ -363,6 +442,35 @@
             }
             self.abrirCreateform = abrirCreateform;
 
+            // ABRE O FORMULÁRIO PARA CRIAÇÃO DE NOVO ITEM
+            // ================================
+            function abrirUpdateform( form_url ){
+
+                $.get( form_url )
+                .success(function(res){
+                    console.log('res');
+                })
+                .fail(function(res){
+                    abrirUpdateform();
+                });
+
+            }
+            self.abrirUpdateform = abrirUpdateform;
+
+            // ABRE O FORMULÁRIO PARA CRIAÇÃO DE NOVO ITEM
+            // ================================
+            function abrirReadform( form_url ){
+
+                $.get( form_url )
+                .success(function(res){
+                    console.log('res');
+                })
+                .fail(function(res){
+                    abrirReadform();
+                });
+
+            }
+            self.abrirReadform = abrirReadform;
         };
 
         return this;

@@ -4,21 +4,19 @@ class Lancamentos_model extends CI_Model {
 
     public function resumo( $params = false, $pagina = false, $por_pagina = false, $retornarTotal = false, $contar = false ){ // retorna um resumo dos usuarios vinculados/reporteres
 
-        $this->db->select('id_lancamento as codigo');
-        $this->db->select('tipo_lancamento as tipo');
-        $this->db->select("DATE_FORMAT(data_lancamento, '%d-%m-%Y') as data", FALSE);
-        $this->db->select('TRUNCATE(valor_lancamento,2) as valor_cobrado', FALSE);
-        $this->db->select('TRUNCATE((produtos.valor_produto*qtd_produto_lancamento),2) as valor_estimado', FALSE);
-        $this->db->select('desc_lancamento as descricao');
-        $this->db->select("REPLACE( REPLACE(realizado_lancamento, '0', 'Não') , '1', 'Sim') as realizado", FALSE);
-        $this->db->select('qtd_produto_lancamento as quantidade');
-        $this->db->select('clientes.nome_cliente as cliente');
-        $this->db->select('produtos.nome_produto as produto');
-        $this->db->select('TRUNCATE(produtos.valor_produto,2) as valor_unidade', FALSE);
-        $this->db->select('fornecedores.nome_fornecedor as fornecedor');
-        $this->db->join('clientes', 'clientes.id_cliente = lancamentos.id_cliente_lancamento', 'left');
-        $this->db->join('produtos', 'produtos.id_produto = lancamentos.id_produto_lancamento', 'left');
-        $this->db->join('fornecedores', 'fornecedores.id_fornecedor = lancamentos.id_fornecedor_lancamento', 'left');
+        $this->db->select('lancamentos.id as codigo');
+        $this->db->select('lancamentos.tipo as tipo');
+        $this->db->select("DATE_FORMAT(data, '%d-%m-%Y') as data", FALSE);
+        $this->db->select('TRUNCATE(lancamentos.valor,2) as valor_cobrado', FALSE);
+        $this->db->select('TRUNCATE((produtos.valor*quantidade),2) as valor_estimado', FALSE);
+        $this->db->select('lancamentos.desc as descricao');
+        //$this->db->select("REPLACE( REPLACE(realizado, '0', 'Não') , '1', 'Sim') as realizado", FALSE);
+        $this->db->select('lancamentos.quantidade');
+        $this->db->select('lancamentos.nome_cliente as cliente');
+        $this->db->select('lancamentos.nome_produto as produto');
+        $this->db->select('TRUNCATE(produtos.valor,2) as valor_unidade', FALSE);
+        $this->db->select('lancamentos.nome_fornecedor as fornecedor');
+        $this->db->join('produtos', 'produtos.nome = lancamentos.nome_produto', 'left');
         $this->db->from('lancamentos'); // busca na tabela we_usuario
 
         if( $por_pagina ) {
@@ -63,6 +61,35 @@ class Lancamentos_model extends CI_Model {
         }
 
         return $res; // retorna a resposta
+
+    }
+
+    public function create( $data ){
+
+        $data = array(
+            'tipo' => isset($data['tipo']) ? $data['tipo'] : 0
+            , 'data_entrega' => isset($data['data_entrega']) ? $data['data_entrega'] : 0
+            , 'data_pagamento' => isset($data['data_pagamento']) ? $data['data_pagamento'] : 0
+            , 'nome_cliente' => isset($data['cliente']) ? $data['cliente'] : 0
+            , 'nome_fornecedor' => isset($data['fornecedor']) ? $data['fornecedor'] : 0
+            , 'nome_produto' => isset($data['produto']) ? $data['produto'] : 0
+            , 'quantidade' => isset($data['quantidade']) ? $data['quantidade'] : 0
+            , 'valor' => isset($data['valor']) ? $data['valor'] : 0
+            , 'desc' => isset($data['desc']) ? $data['desc'] : 0
+            , 'entregue' => isset($data['entregue']) ? $data['entregue'] : 0
+            , 'realizado' => isset($data['realizado']) ? $data['realizado'] : 0
+        );
+
+        $this->db->insert('lancamentos', $data); 
+
+        $id = $this->db->insert_id();
+
+        $res = array( // define a resposta
+            "sucesso" => true // define como sucesso
+            , "id" => $id // insre o resumo
+        );
+
+        return $res;
 
     }
 

@@ -4,7 +4,7 @@
     <table class="bostable table table-hover table-condensed table-stripped" id="tabelaLancamentos" data-url="<?=base_url()?>lancamentos">
         <caption>
             caption definido na view
-            <span class="pull-left"><button class="btn btn-link"><i class="fa fa-plus fa-2x color-success"></i></button></span>
+            <span class="pull-left"><button class="btn btn-link" data-crud-create="<?=base_url()?>lancamentos/createTemplate"><i class="fa fa-plus fa-2x color-success"></i></button></span>
         </caption>
         <thead>
             <th ordenavel>Tipo</th>
