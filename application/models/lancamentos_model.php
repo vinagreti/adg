@@ -71,9 +71,9 @@ class Lancamentos_model extends CI_Model {
             , 'data_entrega' => isset($data['data_entrega']) ? $data['data_entrega'] : 0
             , 'data_pagamento' => isset($data['data_pagamento']) ? $data['data_pagamento'] : 0
             , 'nome_cliente' => isset($data['cliente']) ? $data['cliente'] : 0
-            , 'nome_fornecedor' => isset($data['fornecedor']) ? $data['fornecedor'] : 0
-            , 'nome_produto' => isset($data['produto']) ? $data['produto'] : 0
-            , 'quantidade' => isset($data['quantidade']) ? $data['quantidade'] : 0
+            , 'nome_fornecedor' => isset($data['fornecedor']) ? $data['fornecedor'] : null
+            , 'nome_produto' => isset($data['produto']) ? $data['produto'] : null
+            , 'quantidade' => isset($data['quantidade']) ? $data['quantidade'] : null
             , 'valor' => isset($data['valor']) ? $data['valor'] : 0
             , 'desc' => isset($data['desc']) ? $data['desc'] : 0
             , 'entregue' => isset($data['entregue']) ? $data['entregue'] : 0

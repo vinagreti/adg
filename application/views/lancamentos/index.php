@@ -1,9 +1,8 @@
 <h1><small>Lançamentos</small></h1>
 
 <div class="table-responsive">
-    <table class="bostable table table-hover table-condensed table-stripped" id="tabelaLancamentos" data-url="<?=base_url()?>lancamentos">
+    <table class="bostable table table-hover table-condensed table-striped" id="tabelaLancamentos" data-url="<?=base_url()?>lancamentos">
         <caption>
-            caption definido na view
             <span class="pull-left"><button class="btn btn-link" data-crud-create="<?=base_url()?>lancamentos/createTemplate"><i class="fa fa-plus fa-2x color-success"></i></button></span>
         </caption>
         <thead>
@@ -40,14 +39,5 @@
                 </span></td>
             </tr>
         </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="12">
-                    <p class="text-center">
-                        rodapé definido na view
-                    </p>
-                </td>
-            </tr>
-        </tfoot>
     </table>
 </div>
