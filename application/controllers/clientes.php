@@ -7,13 +7,11 @@ class Clientes extends My_Controller {
     public function listObjects_html()
     {
 
-        $javascript_files = array('js/lancamentos', 'third-party/bostable/bostable', 'third-party/datepicker/js/bootstrap-datepicker', 'third-party/typeahead/typeahead', 'third-party/typeahead/hogan');
+        $javascript_files = array('third-party/bostable/bostable', 'third-party/typeahead/typeahead', 'third-party/typeahead/hogan');
 
-        $css_files = array('third-party/datepicker/css/datepicker');
+        $conteudo = $this->load->view('clientes/index', false, true);
 
-        $conteudo = $this->load->view('lancamentos/index', false, true);
-
-        $this->template->load('private', $conteudo, $javascript_files, $css_files, null); // carrega a pagina inicial
+        $this->template->load('private', $conteudo, $javascript_files, null, null); // carrega a pagina inicial
 
     }
 

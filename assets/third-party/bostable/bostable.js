@@ -250,7 +250,7 @@
 
                 } else {
 
-                    footer( '---' );
+                    footer( '' );
 
                 }
 
