@@ -35,7 +35,7 @@
         function bostableClass( tabela ) {
 
             var self = this; // instancia a si mesmo para poder ser referenciado dentro de funções
-            var total = 0; // total de iténs encontrados
+            var total_banco = 0; // total de iténs encontrados no banco
             var pagina = 1; // número da página atual
             var por_pagina = 30; // númerod e itens por página
             var base_url_tabela = tabela.attr("data-url").replace(/\/\s*$/, "")+"/"; // uri base da tabela (insere / no fim da string)
@@ -222,54 +222,47 @@
             // ================================
             function atualizarPaginacao(){
 
-                if(total == 0)
-                    tabela.find("tfoot").html(defaultFoot);
+                pagina = pagina ? parseInt(pagina) : 1;
 
-                else{
+                por_pagina = por_pagina ? parseInt(por_pagina) : 30;
 
-                    pagina = pagina ? parseInt(pagina) : 1;
+                var totalPaginas = Math.ceil(total_banco / por_pagina);
 
-                    por_pagina = por_pagina ? parseInt(por_pagina) : 30;
+                if( totalPaginas > 1 ){
 
-                    var totalPaginas = Math.ceil(total / por_pagina);
+                    var paginacao = '<div class="text-center"><ul class="pagination">';
 
-                    if( totalPaginas > 1 ){
+                    paginacao += '<li><a href="'+base_url_tabela+'?pagina=1&por_pagina='+por_pagina+'">&laquo;</a></li>';
 
-                        var paginacao = '<div class="text-center"><ul class="pagination">';
+                    paginacao += '<li><a href="'+base_url_tabela+'?pagina='+(pagina > 2 ? pagina - 1 : 1)+'&por_pagina='+por_pagina+'">&lt;</a></li>';
 
-                        paginacao += '<li><a href="'+base_url_tabela+'?pagina=1&por_pagina='+por_pagina+'">&laquo;</a></li>';
+                    for (var i = 1; i <= totalPaginas; i++) {
+                        paginacao += '<li class="'+ (i == pagina ? 'active' : '') + '"><a href="'+base_url_tabela+'?pagina='+i+'&por_pagina='+por_pagina+'">'+i+' <span class="sr-only">(current)</span></a></li>';
+                    };
 
-                        paginacao += '<li><a href="'+base_url_tabela+'?pagina='+(pagina > 2 ? pagina - 1 : 1)+'&por_pagina='+por_pagina+'">&lt;</a></li>';
+                    paginacao += '<li><a href="'+base_url_tabela+'?pagina='+ ((pagina < totalPaginas) ? (pagina+1) : pagina) +'&por_pagina='+por_pagina+'">&gt;</a></li>';
 
-                        for (var i = 1; i <= totalPaginas; i++) {
-                            paginacao += '<li class="'+ (i == pagina ? 'active' : '') + '"><a href="'+base_url_tabela+'?pagina='+i+'&por_pagina='+por_pagina+'">'+i+' <span class="sr-only">(current)</span></a></li>';
-                        };
+                    paginacao += '<li><a href="'+base_url_tabela+'?pagina='+ totalPaginas +'&por_pagina='+por_pagina+'">&raquo;</a></li>';
 
-                        paginacao += '<li><a href="'+base_url_tabela+'?pagina='+ ((pagina < totalPaginas) ? (pagina+1) : pagina) +'&por_pagina='+por_pagina+'">&gt;</a></li>';
+                    paginacao += '</ul></div>';
 
-                        paginacao += '<li><a href="'+base_url_tabela+'?pagina='+ totalPaginas +'&por_pagina='+por_pagina+'">&raquo;</a></li>';
+                    footer( $(paginacao ) );
 
-                        paginacao += '</ul></div>';
+                } else {
 
-                        footer( $(paginacao ) );
-
-                    } else {
-
-                        footer( '' );
-
-                    }
-
-                    var posicaoPrimeiroItem = total > 0 ? (pagina * por_pagina) + 1 - por_pagina : 0;
-
-                    var posicaoSegundoItem = (posicaoPrimeiroItem + por_pagina - 1) > total ? total : posicaoPrimeiroItem + por_pagina -1;
-
-                    var totalresumeHTML = $(document.createElement('span')).html("Mostrando do " + posicaoPrimeiroItem + "&ordm até o " + posicaoSegundoItem + "&ordm de " + total + " registro(s) encontrado(s).");
-
-                    var captionContent = $(document.createElement('small')).addClass('text-info').append( totalresumeHTML );
-
-                    self.caption( captionContent );
+                    footer( '---' );
 
                 }
+
+                var posicaoPrimeiroItem = total_banco > 0 ? (pagina * por_pagina) + 1 - por_pagina : 0;
+
+                var posicaoSegundoItem = (posicaoPrimeiroItem + por_pagina - 1) > total_banco ? total_banco : posicaoPrimeiroItem + por_pagina -1;
+
+                var totalresumeHTML = $(document.createElement('span')).html("Mostrando do " + posicaoPrimeiroItem + "&ordm até o " + posicaoSegundoItem + "&ordm de " + total + " registro(s) encontrado(s).");
+
+                var captionContent = $(document.createElement('small')).addClass('text-info').append( totalresumeHTML );
+
+                self.caption( captionContent );
 
             }
             self.atualizarPaginacao = atualizarPaginacao;
