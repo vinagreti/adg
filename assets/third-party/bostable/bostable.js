@@ -130,6 +130,11 @@
 
                         aplicarGatilhosTabela();
 
+                    }).fail(function( a, b, c ){
+                        if( a.responseJSON )
+                            destacaCamposComProblemaEmForms( a.responseJSON );
+
+                        mostraErro( a.responseJSON );
                     });
 
                     return false;
@@ -138,6 +143,42 @@
 
             }
             self.aplicarGatilhosForm = aplicarGatilhosForm;
+
+            function destacaCamposComProblemaEmForms( erros ){
+
+                tabela.find('.form-group').removeClass('has-error');
+
+                $.each( erros, function( index, erro ){
+
+                    $("[name='"+index+"']").parents(".form-group").addClass('has-error');
+
+                });
+
+            };
+
+            function mostraErro( erros ){
+
+                var formAlertMsg = tabela.find('form').find('.alert');
+
+                if( formAlertMsg.length == 0 ){
+
+                    formAlertMsg = $(document.createElement('div')).addClass("alert alert-danger");
+
+                    tabela.find('form').prepend( formAlertMsg );
+
+                }
+
+                var errorString = '';
+
+                $.each(erros, function(index, error){
+                    errorString += '<p>'+error+'</p>';
+                });
+
+                formAlertMsg.html(errorString);
+
+            }
+
+            self.caption = mostraErro;
 
             // PEGA OS DADOS NA API REST
             // ================================
@@ -415,11 +456,11 @@
             }
             self.limpar = limpar;
 
-            function showForm( form, method ){
+            function showForm( method ){
 
                 self.tablePageContent = tabela.html();
 
-                tabela.html($(form));
+                tabela.html(self.postForm.clone());
 
                 aplicarGatilhosForm( method );
 
@@ -429,15 +470,24 @@
             // ================================
             function abrirCreateform( form_url ){
 
-                $.get( form_url )
-                .success(function(form){
+                if( ! self.postForm ){
 
-                    showForm( form, 'post' );
+                    $.get( form_url )
+                    .success(function(form){
 
-                })
-                .fail(function(res){
-                    abrirCreateform();
-                });
+                        self.postForm = $(form);
+
+                        showForm( 'post' );
+
+                    })
+                    .fail(function(res){
+                        abrirCreateform();
+                    });
+
+                } else
+                    showForm( 'post' );
+
+
 
             }
             self.abrirCreateform = abrirCreateform;

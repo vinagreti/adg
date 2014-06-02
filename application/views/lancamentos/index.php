@@ -12,6 +12,7 @@
             <th ordenavel>Unidade</th>
             <th ordenavel>Estimado</th>
             <th ordenavel>Cobrado</th>
+            <th ordenavel>Desconto</th>
             <th ordenavel>Cliente</th>
             <th ordenavel>Fornecedor</th>
             <th ordenavel>Desc</th>
@@ -27,6 +28,7 @@
                 <td class="valor_unidade"></td>
                 <td class="valor_estimado"></td>
                 <td class="valor_cobrado"></td>
+                <td class="desconto"></td>
                 <td class="cliente"></td>
                 <td class="fornecedor"></td>
                 <td class="descricao"></td>

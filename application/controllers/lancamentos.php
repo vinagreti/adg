@@ -54,18 +54,18 @@ class Lancamentos extends My_Controller {
 
         $this->load->model("lancamentos_model");
 
-        $response = $this->lancamentos_model->create( $data );
+        $createObject = $this->lancamentos_model->create( $data );
 
-        if( $response['sucesso'] )
-            redirect(base_url().'lancamentos/?id='.$response['id']);
+        if( $createObject['sucesso'] )
+            redirect(base_url().'lancamentos/?id='.$createObject['id']);
 
         else{
 
-            header( "HTTP/1.0 400 ". utf8_decode( $editar["msg"] ) ); // seta o código e a mensagem de erro no cabeçalho da resposta
+            header( "HTTP/1.0 400"); // seta o código e a mensagem de erro no cabeçalho da resposta
 
             header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
 
-            echo json_encode( $response['msg'] ); // responde
+            echo json_encode( $createObject['error'] ); // responde
 
         }
 

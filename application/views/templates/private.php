@@ -132,6 +132,7 @@
                                 <li <?php if($this->router->fetch_class() == 'welcome') echo 'class="active"'; ?> ><a href="<?=base_url()?>">Bem vindo</a></li>
                                 <li <?php if($this->router->fetch_class() == 'quemsomos') echo 'class="active"'; ?>><a href="quemsomos">Quem somos</a></li>
                                 <li <?php if($this->router->fetch_class() == 'cardapio') echo 'class="active"'; ?>><a href="cardapio">Cardápio</a></li>
+                                <li <?php if($this->router->fetch_class() == 'cofeebreak') echo 'class="active"'; ?>><a href="cofeebreak">Cofee break</a></li>
                                 <li <?php if($this->router->fetch_class() == 'contato') echo 'class="active"'; ?>><a href="contato">Fale conosco</a></li>
                                 <li <?php if($this->router->fetch_class() == 'clientes') echo 'class="active"'; ?>><a href="clientes">Clientes</a></li>
                                 <li <?php if($this->router->fetch_class() == 'fornecedores') echo 'class="active"'; ?>><a href="fornecedores">Fornecedores</a></li>
