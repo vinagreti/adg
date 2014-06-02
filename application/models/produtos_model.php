@@ -65,6 +65,7 @@ class Produtos_model extends CI_Model {
 
         $this->db->select('id');
         $this->db->select('nome');
+        $this->db->select('valor');
         $this->db->where('produtos.id', $id);
         $this->db->from('produtos'); // busca na tabela we_usuario
 
@@ -98,6 +99,7 @@ class Produtos_model extends CI_Model {
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('nome', 'Nome', 'required');
+        $this->form_validation->set_rules('valor', 'Valor', 'is_numeric|required');
 
         if ($this->form_validation->run() == FALSE)
         {
@@ -110,6 +112,7 @@ class Produtos_model extends CI_Model {
         {
             $data = array(
                 'nome' => $data['nome']
+                , 'valor' => $data['valor']
             );
 
             $this->db->insert('produtos', $data); 
