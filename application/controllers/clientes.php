@@ -42,4 +42,38 @@ class Clientes extends My_Controller {
         echo json_encode( $res ); // responde
     }
 
+    public function createTemplate(){
+
+        $this->load->view('clientes/createTemplate', false);
+
+    }
+
+    public function createObject( $data ){
+
+        $this->load->model("clientes_model");
+
+        $createObject = $this->clientes_model->create( $data );
+
+        if( $createObject['sucesso'] )
+            redirect(base_url().'clientes/?id='.$createObject['id']);
+
+        else{
+
+            header( "HTTP/1.0 400"); // seta o código e a mensagem de erro no cabeçalho da resposta
+
+            header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
+
+            echo json_encode( $createObject['error'] ); // responde
+
+        }
+
+    }
+
+    public function readObject_json(){
+
+        header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
+
+        echo '{"codigo":"1","tipo":"C","data":"12-05-2014","valor_cobrado":"35.00","valor_estimado":"35.00","descricao":"Encomenda para a OSTEC","realizado":"Sim","quantidade":"10","cliente":"Cassio Brodbeck","produto":"Sanduiche de Frango","valor_unidade":"3.50","fornecedor":null}';
+
+    }
 }

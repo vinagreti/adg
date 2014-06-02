@@ -61,12 +61,35 @@ class Clientes_model extends CI_Model {
 
     public function create( $data ){
 
-        $id = 32;
+        // Form validation
+        $this->load->helper('form');
 
-        $res = array( // define a resposta
-            "sucesso" => true // define como sucesso
-            , "id" => $id // insre o resumo
-        );
+        $this->load->library('form_validation');
+
+        $this->form_validation->set_rules('nome', 'Nome', 'required');
+
+        if ($this->form_validation->run() == FALSE)
+        {
+            $res = array( // define a resposta
+                "sucesso" => false // define como sucesso
+                , "error" => $this->form_validation->error_array() // insere o erro
+            );
+        }
+        else
+        {
+            $data = array(
+                'nome' => $data['nome']
+            );
+
+            $this->db->insert('clientes', $data); 
+
+            $id = $this->db->insert_id();
+
+            $res = array( // define a resposta
+                "sucesso" => true // define como sucesso
+                , "id" => $id // insre o resumo
+            );
+        }
 
         return $res;
 
