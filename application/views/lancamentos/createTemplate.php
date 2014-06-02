@@ -141,17 +141,17 @@
       , engine: Hogan
   }).bind("typeahead:selected", function(res, obj, name) {
     $('#preco_produto').val(obj.valor);
-    $('#valor').val(parseInt($('#quantidade').val())*obj.valor);
+    $('#valor').val(parseFloat($('#quantidade').val())*obj.valor);
     $('#valor').change();
   });
 
   $('#quantidade').on('change', function(){
-    $('#valor').val(parseInt($('#preco_produto').val())*parseInt(this.value));
+    $('#valor').val(parseFloat($('#preco_produto').val())*parseFloat(this.value));
     $('#valor').change();
   });
 
   $('#valor, #desconto').on('change', function(){
-    $('#valor_final').val(parseInt($('#valor').val())-parseInt($('#desconto').val()));
+    $('#valor_final').val(parseFloat($('#valor').val())-parseFloat($('#desconto').val()));
   });
 
 </script>
