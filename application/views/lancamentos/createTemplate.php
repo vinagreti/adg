@@ -47,23 +47,26 @@
   </div>
 
   <div class="form-group">
-    <label for="cliente" class="col-sm-2 control-label">Cliente</label>
+    <label for="cliente_typeahead" class="col-sm-2 control-label">Cliente</label>
     <div class="col-sm-10">
-      <input id="cliente" name="cliente" type="text" class="form-control" placeholder="Digite o nome do cliente">
+      <input id="cliente_typeahead" type="text" class="form-control" placeholder="Digite o nome do cliente">
+      <input id="cliente" name="cliente" type="hidden">
     </div>
   </div>
 
   <div class="form-group hide">
-    <label for="fornecedor" class="col-sm-2 control-label">Fornecedor</label>
+    <label for="fornecedor_typeahead" class="col-sm-2 control-label">Fornecedor</label>
     <div class="col-sm-10">
-      <input id="fornecedor" name="fornecedor" type="text" class="form-control" placeholder="Digite o nome do fornecedor">
+      <input id="fornecedor_typeahead" type="text" class="form-control" placeholder="Digite o nome do fornecedor">
+      <input id="fornecedor" name="fornecedor" type="hidden">
     </div>
   </div>
 
   <div class="form-group">
-    <label for="produto" class="col-sm-2 control-label">Produto</label>
+    <label for="produto_typeahead" class="col-sm-2 control-label">Produto</label>
     <div class="col-sm-10">
-      <input id="produto" name="produto" type="text" class="form-control" placeholder="Digite o nome do produto">
+      <input id="produto_typeahead" type="text" class="form-control" placeholder="Digite o nome do produto">
+      <input id="produto" name="produto" type="hidden">
     </div>
   </div>
 
@@ -119,29 +122,34 @@
 <script type="text/javascript">
   $('#data_entrega, #data_pagamento').datepicker();
 
-  $('#cliente').typeahead({
+  $('#cliente_typeahead').typeahead({
       name: 'Clientes'
       , valueKey : "nome"
       , remote : "clientes/?nome=%QUERY"
-      , template: "<p>{{nome}} - {{valor}}</p>"
+      , template: "<p>{{nome}}</p>"
       , engine: Hogan
+  }).bind("typeahead:selected", function(res, obj, name) {
+    $('#cliente').val(obj.id);;
   });
 
-  $('#fornecedor').typeahead({
+  $('#fornecedor_typeahead').typeahead({
       name: 'Fornecedores'
       , valueKey : "nome"
       , remote : "fornecedores/?nome=%QUERY"
-      , template: "<p>{{nome}} - {{valor}}</p>"
+      , template: "<p>{{nome}}</p>"
       , engine: Hogan
+  }).bind("typeahead:selected", function(res, obj, name) {
+    $('#fornecedor').val(obj.id);;
   });
 
-  $('#produto').typeahead({
+  $('#produto_typeahead').typeahead({
       name: 'Produtos'
       , valueKey : "nome"
       , remote : "produtos/?nome=%QUERY"
       , template: "<p>{{nome}} - {{valor}}</p>"
       , engine: Hogan
   }).bind("typeahead:selected", function(res, obj, name) {
+    $('#produto').val(obj.id);;
     $('#preco_produto').val(obj.valor);
     $('#valor').val(parseFloat($('#quantidade').val())*obj.valor);
     $('#valor').change();

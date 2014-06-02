@@ -2,7 +2,7 @@
 
 class Lancamentos_model extends CI_Model {
 
-    public function resumo( $params = false, $pagina = false, $por_pagina = false, $retornarTotal = false, $contar = false ){ // retorna um resumo dos usuarios vinculados/reporteres
+    public function listObjects( $params = false, $pagina = false, $por_pagina = false, $retornarTotal = false, $contar = false ){ // retorna um resumo dos usuarios vinculados/reporteres
 
         $this->db->select('lancamentos.id as codigo');
         $this->db->select('lancamentos.tipo as tipo');
@@ -13,11 +13,13 @@ class Lancamentos_model extends CI_Model {
         $this->db->select("TRUNCATE(lancamentos.desconto,2) as desconto", FALSE);
         //$this->db->select("REPLACE( REPLACE(realizado, '0', 'Não') , '1', 'Sim') as realizado", FALSE);
         $this->db->select('lancamentos.quantidade');
-        $this->db->select('lancamentos.nome_cliente as cliente');
-        $this->db->select('lancamentos.nome_produto as produto');
+        $this->db->select('clientes.nome as cliente');
+        $this->db->select('produtos.nome as produto');
         $this->db->select('TRUNCATE(produtos.valor,2) as valor_unidade', FALSE);
-        $this->db->select('lancamentos.nome_fornecedor as fornecedor');
-        $this->db->join('produtos', 'produtos.nome = lancamentos.nome_produto', 'left');
+        $this->db->select('fornecedores.nome as fornecedor');
+        $this->db->join('produtos', 'produtos.id = lancamentos.id_produto', 'left');
+        $this->db->join('clientes', 'clientes.id = lancamentos.id_cliente', 'left');
+        $this->db->join('fornecedores', 'fornecedores.id = lancamentos.id_fornecedor', 'left');
         $this->db->order_by('lancamentos.id', 'desc');
         $this->db->from('lancamentos'); // busca na tabela we_usuario
 
@@ -47,7 +49,7 @@ class Lancamentos_model extends CI_Model {
 
                 if( $retornarTotal ){
 
-                    $res["total"] = $this->resumo($params, false, false, false, true);
+                    $res["total"] = $this->listObjects($params, false, false, false, true);
 
                 }
 
@@ -55,7 +57,7 @@ class Lancamentos_model extends CI_Model {
 
                 $res = array( // define a resposta
                     "sucesso" => false // define como falha
-                    , "msg" => "Erro ao carregar resumo dos Lançamentos. Tente novamente mais tarde." // insre uma mesagem de erro
+                    , "msg" => "Erro ao carregar resumo dos lançamentos. Tente novamente mais tarde." // insre uma mesagem de erro
                 );
 
             }
@@ -66,7 +68,51 @@ class Lancamentos_model extends CI_Model {
 
     }
 
-    public function create( $data ){
+    public function readObject( $id ){ // retorna um resumo dos usuarios vinculados/reporteres
+
+        $this->db->select('lancamentos.id as codigo');
+        $this->db->select('lancamentos.tipo as tipo');
+        $this->db->select("DATE_FORMAT(data, '%d-%m-%Y') as data", FALSE);
+        $this->db->select('TRUNCATE(lancamentos.valor,2) as valor_cobrado', FALSE);
+        $this->db->select('TRUNCATE((produtos.valor*quantidade),2) as valor_estimado', FALSE);
+        $this->db->select('lancamentos.desc as descricao');
+        $this->db->select("TRUNCATE(lancamentos.desconto,2) as desconto", FALSE);
+        //$this->db->select("REPLACE( REPLACE(realizado, '0', 'Não') , '1', 'Sim') as realizado", FALSE);
+        $this->db->select('lancamentos.quantidade');
+        $this->db->select('clientes.nome as cliente');
+        $this->db->select('produtos.nome as produto');
+        $this->db->select('TRUNCATE(produtos.valor,2) as valor_unidade', FALSE);
+        $this->db->select('fornecedores.nome as fornecedor');
+        $this->db->join('produtos', 'produtos.id = lancamentos.id_produto', 'left');
+        $this->db->join('clientes', 'clientes.id = lancamentos.id_cliente', 'left');
+        $this->db->join('fornecedores', 'fornecedores.id = lancamentos.id_fornecedor', 'left');
+        $this->db->where('lancamentos.id', $id);
+        $this->db->order_by('lancamentos.id', 'desc');
+        $this->db->from('lancamentos'); // busca na tabela we_usuario
+
+        $object =  $this->db->get()->row(); // retorna o objeto
+
+        if( $object ){ // se a consulta for bem sucedida
+
+            $res = array( // define a resposta
+                "sucesso" => true // define como sucesso
+                , "object" => $object // insre o resumo
+            );
+
+        } else { // se for mal sucedida
+
+            $res = array( // define a resposta
+                "sucesso" => false // define como falha
+                , "msg" => "Erro ao carregar lançamento. Tente novamente mais tarde." // insre uma mesagem de erro
+            );
+
+        }
+
+        return $res; // retorna a resposta
+
+    }
+
+    public function createObject( $data ){
 
         // Form validation
         $this->load->helper('form');
@@ -76,7 +122,7 @@ class Lancamentos_model extends CI_Model {
         $this->form_validation->set_rules('tipo', 'Tipo', 'required');
         $this->form_validation->set_rules('data_entrega', 'Entrega', 'required');
         $this->form_validation->set_rules('data_pagamento', 'Pagamento', 'required');
-        $this->form_validation->set_rules('produto', 'Produto', 'required');
+        $this->form_validation->set_rules('produto', 'Produto', 'integer|required');
         $this->form_validation->set_rules('quantidade', 'Quantidade', 'integer|required');
         $this->form_validation->set_rules('valor', 'Valor', 'is_numeric|required');
         $this->form_validation->set_rules('desconto', 'Desconto', 'is_numeric');
@@ -94,9 +140,9 @@ class Lancamentos_model extends CI_Model {
                 'tipo' => $data['tipo']
                 , 'data_entrega' => $data['data_entrega']
                 , 'data_pagamento' => $data['data_pagamento']
-                , 'nome_cliente' => (isset($data['cliente']) && !empty($data['cliente'])) ? $data['cliente'] : null
-                , 'nome_fornecedor' => (isset($data['fornecedor']) && !empty($data['fornecedor'])) ? $data['fornecedor'] : null
-                , 'nome_produto' => $data['produto']
+                , 'id_cliente' => (isset($data['cliente']) && !empty($data['cliente'])) ? $data['cliente'] : null
+                , 'id_fornecedor' => (isset($data['fornecedor']) && !empty($data['fornecedor'])) ? $data['fornecedor'] : null
+                , 'id_produto' => $data['produto']
                 , 'quantidade' => $data['quantidade']
                 , 'valor' => $data['valor']
                 , 'desc' => $data['desc']

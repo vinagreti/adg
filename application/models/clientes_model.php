@@ -11,6 +11,7 @@ class Clientes_model extends CI_Model {
 
         }
 
+        $this->db->select('id');
         $this->db->select('nome');
         $this->db->from('clientes'); // busca na tabela we_usuario
 
@@ -48,10 +49,39 @@ class Clientes_model extends CI_Model {
 
                 $res = array( // define a resposta
                     "sucesso" => false // define como falha
-                    , "msg" => "Erro ao carregar resumo dos Lançamentos. Tente novamente mais tarde." // insre uma mesagem de erro
+                    , "msg" => "Erro ao carregar resumo dos clientes. Tente novamente mais tarde." // insre uma mesagem de erro
                 );
 
             }
+
+        }
+
+        return $res; // retorna a resposta
+
+    }
+
+    public function readObject( $id ){ // retorna um resumo dos usuarios vinculados/reporteres
+
+        $this->db->select('id');
+        $this->db->select('nome');
+        $this->db->where('clientes.id', $id);
+        $this->db->from('clientes'); // busca na tabela we_usuario
+
+        $object =  $this->db->get()->row(); // retorna o objeto
+
+        if( $object ){ // se a consulta for bem sucedida
+
+            $res = array( // define a resposta
+                "sucesso" => true // define como sucesso
+                , "object" => $object // insre o resumo
+            );
+
+        } else { // se for mal sucedida
+
+            $res = array( // define a resposta
+                "sucesso" => false // define como falha
+                , "msg" => "Erro ao carregar cliente. Tente novamente mais tarde." // insre uma mesagem de erro
+            );
 
         }
 

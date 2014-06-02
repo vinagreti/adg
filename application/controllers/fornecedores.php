@@ -42,4 +42,60 @@ class Fornecedores extends My_Controller {
         echo json_encode( $res ); // responde
     }
 
+    public function createTemplate(){
+
+        $this->load->view('fornecedores/createTemplate', false);
+
+    }
+
+    public function createObject( $data ){
+
+        $this->load->model("fornecedores_model");
+
+        $createObject = $this->fornecedores_model->create( $data );
+
+        if( $createObject['sucesso'] )
+            redirect(base_url().'fornecedores/?id='.$createObject['id']);
+
+        else{
+
+            header( "HTTP/1.0 400"); // seta o código e a mensagem de erro no cabeçalho da resposta
+
+            header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
+
+            echo json_encode( $createObject['error'] ); // responde
+
+        }
+
+    }
+
+    public function readObject_json( $id ){
+
+        $this->load->model("fornecedores_model");
+
+        $carregarObjecto = $this->fornecedores_model->readObject($id);
+
+        if( $carregarObjecto["sucesso"] ){ // se a consulta ao banco for bem sucedida
+
+            $res = $carregarObjecto["object"]; // insere o objeto na resposta
+
+        } else { // se a consulta ao banco não for bem sucedida
+
+            $res = $carregarObjecto["msg"]; // mensagem de erro
+
+            header( "HTTP/1.0 400 ". utf8_decode( $carregarObjecto["msg"] ) ); // seta o código e a mensagem de erro no cabeçalho da resposta
+
+        }
+
+        header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
+
+        echo json_encode( $res ); // responde
+
+    }
+
+    public function readObject_html( $id ){
+
+        $this->readObject_json( $id );
+
+    }
 }

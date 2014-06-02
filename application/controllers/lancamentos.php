@@ -21,7 +21,7 @@ class Lancamentos extends My_Controller {
 
         $this->load->model("lancamentos_model");
 
-        $carregarResumo = $this->lancamentos_model->resumo($_GET, false, false, true);
+        $carregarResumo = $this->lancamentos_model->listObjects($_GET, false, false, true);
 
         if( $carregarResumo["sucesso"] ){ // se a consulta ao banco for bem sucedida
 
@@ -36,8 +36,6 @@ class Lancamentos extends My_Controller {
             header( "HTTP/1.0 400 ". utf8_decode( $carregarResumo["msg"] ) ); // seta o código e a mensagem de erro no cabeçalho da resposta
 
         }
-
-        // usleep(rand(1000000,30000000));
 
         header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
 
@@ -54,7 +52,7 @@ class Lancamentos extends My_Controller {
 
         $this->load->model("lancamentos_model");
 
-        $createObject = $this->lancamentos_model->create( $data );
+        $createObject = $this->lancamentos_model->createObject( $data );
 
         if( $createObject['sucesso'] )
             redirect(base_url().'lancamentos/?id='.$createObject['id']);
@@ -68,7 +66,6 @@ class Lancamentos extends My_Controller {
             echo json_encode( $createObject['error'] ); // responde
 
         }
-
 
     }
 
@@ -92,17 +89,33 @@ class Lancamentos extends My_Controller {
 
     }
 
-    public function readObject_json(){
+    public function readObject_json( $id ){
+
+        $this->load->model("lancamentos_model");
+
+        $carregarObjecto = $this->lancamentos_model->readObject($id);
+
+        if( $carregarObjecto["sucesso"] ){ // se a consulta ao banco for bem sucedida
+
+            $res = $carregarObjecto["object"]; // insere o objeto na resposta
+
+        } else { // se a consulta ao banco não for bem sucedida
+
+            $res = $carregarObjecto["msg"]; // mensagem de erro
+
+            header( "HTTP/1.0 400 ". utf8_decode( $carregarObjecto["msg"] ) ); // seta o código e a mensagem de erro no cabeçalho da resposta
+
+        }
 
         header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
 
-        echo '{"codigo":"1","tipo":"C","data":"12-05-2014","valor_cobrado":"35.00","valor_estimado":"35.00","descricao":"Encomenda para a OSTEC","realizado":"Sim","quantidade":"10","cliente":"Cassio Brodbeck","produto":"Sanduiche de Frango","valor_unidade":"3.50","fornecedor":null}';
+        echo json_encode( $res ); // responde
 
     }
 
-    public function readObject_html(){
+    public function readObject_html( $id ){
 
-        $this->readObject_json();
+        $this->readObject_json( $id );
 
     }
 }

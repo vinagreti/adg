@@ -11,6 +11,7 @@ class Produtos_model extends CI_Model {
 
         }
 
+        $this->db->select('id');
         $this->db->select('nome');
         $this->db->select('valor');
         $this->db->from('produtos'); // busca na tabela we_usuario
@@ -49,7 +50,7 @@ class Produtos_model extends CI_Model {
 
                 $res = array( // define a resposta
                     "sucesso" => false // define como falha
-                    , "msg" => "Erro ao carregar resumo dos Lançamentos. Tente novamente mais tarde." // insre uma mesagem de erro
+                    , "msg" => "Erro ao carregar resumo dos produtos. Tente novamente mais tarde." // insre uma mesagem de erro
                 );
 
             }
@@ -60,14 +61,66 @@ class Produtos_model extends CI_Model {
 
     }
 
+    public function readObject( $id ){ // retorna um resumo dos usuarios vinculados/reporteres
+
+        $this->db->select('id');
+        $this->db->select('nome');
+        $this->db->where('produtos.id', $id);
+        $this->db->from('produtos'); // busca na tabela we_usuario
+
+        $object =  $this->db->get()->row(); // retorna o objeto
+
+        if( $object ){ // se a consulta for bem sucedida
+
+            $res = array( // define a resposta
+                "sucesso" => true // define como sucesso
+                , "object" => $object // insre o resumo
+            );
+
+        } else { // se for mal sucedida
+
+            $res = array( // define a resposta
+                "sucesso" => false // define como falha
+                , "msg" => "Erro ao carregar produto. Tente novamente mais tarde." // insre uma mesagem de erro
+            );
+
+        }
+
+        return $res; // retorna a resposta
+
+    }
+
     public function create( $data ){
 
-        $id = 32;
+        // Form validation
+        $this->load->helper('form');
 
-        $res = array( // define a resposta
-            "sucesso" => true // define como sucesso
-            , "id" => $id // insre o resumo
-        );
+        $this->load->library('form_validation');
+
+        $this->form_validation->set_rules('nome', 'Nome', 'required');
+
+        if ($this->form_validation->run() == FALSE)
+        {
+            $res = array( // define a resposta
+                "sucesso" => false // define como sucesso
+                , "error" => $this->form_validation->error_array() // insere o erro
+            );
+        }
+        else
+        {
+            $data = array(
+                'nome' => $data['nome']
+            );
+
+            $this->db->insert('produtos', $data); 
+
+            $id = $this->db->insert_id();
+
+            $res = array( // define a resposta
+                "sucesso" => true // define como sucesso
+                , "id" => $id // insre o resumo
+            );
+        }
 
         return $res;
 
