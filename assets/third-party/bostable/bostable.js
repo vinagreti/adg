@@ -1,5 +1,5 @@
 // Bostable
-// Classe de criação e manipulação de tabelas
+// Classe de criação e manipulação de tabelas com recursos REST
 // Author: Bruno da Silva João
 // https://github.com/vinagreti
 
@@ -78,7 +78,7 @@
 
                     var form_url = $(this).attr('data-crud-create');
 
-                    self.abrirCreateform( form_url );
+                    self.abrirPostForm( form_url );
 
                 });
 
@@ -86,7 +86,7 @@
 
                     var form_url = $(this).attr('data-crud-update');
 
-                    self.abrirUpdateform( form_url );
+                    self.abrirPatchForm( form_url );
 
                 });
 
@@ -94,7 +94,15 @@
 
                     var form_url = $(this).attr('data-crud-read');
 
-                    self.abrirReadform( form_url );
+                    self.abrirGetForm( form_url );
+
+                });
+
+                tabela.find('[data-crud-drop]').unbind('click').on('click', function(){
+
+                    var form_url = $(this).attr('data-crud-drop');
+
+                    self.abrirDeleteForm( form_url );
 
                 });
 
@@ -453,15 +461,15 @@
 
                 self.tablePageContent = tabela.html();
 
-                tabela.html(self.postForm.clone());
+                tabela.html(self[method+'Form'].clone());
 
                 aplicarGatilhosForm( method );
 
             }
 
-            // ABRE O FORMULÁRIO PARA CRIAÇÃO DE NOVO ITEM
+            // ABRE O FORMULÁRIO PARA CRIAÇÃO DE UM NOVO ITEM
             // ================================
-            function abrirCreateform( form_url ){
+            function abrirPostForm( form_url ){
 
                 if( ! self.postForm ){
 
@@ -474,7 +482,7 @@
 
                     })
                     .fail(function(res){
-                        abrirCreateform();
+                        abrirPostForm();
                     });
 
                 } else
@@ -483,37 +491,79 @@
 
 
             }
-            self.abrirCreateform = abrirCreateform;
+            self.abrirPostForm = abrirPostForm;
 
-            // ABRE O FORMULÁRIO PARA CRIAÇÃO DE NOVO ITEM
+            // ABRE O FORMULÁRIO PARA EDIÇÃO DE UM ITEM
             // ================================
-            function abrirUpdateform( form_url ){
+            function abrirPatchForm( form_url ){
 
-                $.get( form_url )
-                .success(function(res){
-                    console.log('res');
-                })
-                .fail(function(res){
-                    abrirUpdateform();
-                });
+                if( ! self.patchForm ){
+
+                    $.get( form_url )
+                    .success(function(form){
+
+                        self.patchForm = $(form);
+
+                        showForm( 'patch' );
+
+                    })
+                    .fail(function(res){
+                        abrirPatchForm();
+                    });
+
+                } else
+                    showForm( 'patch' );
 
             }
-            self.abrirUpdateform = abrirUpdateform;
+            self.abrirPatchForm = abrirPatchForm;
 
-            // ABRE O FORMULÁRIO PARA CRIAÇÃO DE NOVO ITEM
+            // ABRE O FORMULÁRIO PARA VISUALIZAÇÃO DE UM ITEM
             // ================================
-            function abrirReadform( form_url ){
+            function abrirGetForm( form_url ){
 
-                $.get( form_url )
-                .success(function(res){
-                    console.log('res');
-                })
-                .fail(function(res){
-                    abrirReadform();
-                });
+                if( ! self.getForm ){
+
+                    $.get( form_url )
+                    .success(function(form){
+
+                        self.getForm = $(form);
+
+                        showForm( 'get' );
+
+                    })
+                    .fail(function(res){
+                        abrirGetForm();
+                    });
+
+                } else
+                    showForm( 'get' );
 
             }
-            self.abrirReadform = abrirReadform;
+            self.abrirGetForm = abrirGetForm;
+
+            // ABRE O FORMULÁRIO PARA REMOÇÃO DE UM ITEM
+            // ================================
+            function abrirDeleteForm( form_url ){
+
+                if( ! self.deleteForm ){
+
+                    $.get( form_url )
+                    .success(function(form){
+
+                        self.deleteForm = $(form);
+
+                        showForm( 'delete' );
+
+                    })
+                    .fail(function(res){
+                        abrirDeleteForm();
+                    });
+
+                } else
+                    showForm( 'delete' );
+
+            }
+            self.abrirDeleteForm = abrirDeleteForm;
         };
 
         return this;

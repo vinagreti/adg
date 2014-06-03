@@ -1,4 +1,6 @@
-<form method="post" class="form-horizontal" role="form">
+<h2><small>Criar lançamento</small></h2>
+
+<form class="form-horizontal" role="form">
 
   <div class="form-group">
     <label class="col-sm-2 control-label">Tipo</label>

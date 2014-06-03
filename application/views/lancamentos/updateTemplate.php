@@ -1,25 +1,10 @@
-<form role="form">
+<h2><small>Alterar lançamento</small></h2>
 
+<form class="form-horizontal" role="form">
 
-    <label class="radio-inline">
-      <input type="radio" class="tipo" name="tipo" value="c" checked> Crédito / Venda
-    </label>
-    <label class="radio-inline">
-      <input type="radio" class="tipo" name="tipo" value="d"> Débito / Compra
-    </label>
+  <div class="col-sm-offset-2">
+    <a class="btn btn-primary" data-form-action="close" href="javascript:void(0)"><i class="fa fa-arrow-left"></i></a>
+    <button type="submit" name="submit" class="btn btn-danger" data-form-action="submit"><i class="fa fa-check"> Alterar</i></button>
+  </div>
 
-  <div class="form-group">
-    <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-  </div>
-  <div class="form-group">
-    <label for="exampleInputPassword1">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-  </div>
-  <div class="form-group">
-    <label for="exampleInputFile">File input</label>
-    <input type="file" id="exampleInputFile">
-    <p class="help-block">Example block-level help text here.</p>
-  </div>
-  <button type="submit" class="btn btn-default">Submit</button>
 </form>

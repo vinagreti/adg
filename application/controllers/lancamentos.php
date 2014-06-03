@@ -118,4 +118,14 @@ class Lancamentos extends My_Controller {
         echo json_encode( $res ); // responde
 
     }
+
+    public function dropTemplate(){
+
+        $res = $this->load->view('lancamentos/dropTemplate', false, true);
+
+        header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
+
+        echo json_encode( $res ); // responde
+
+    }
 }

@@ -11,8 +11,10 @@ class Clientes_model extends CI_Model {
 
         }
 
-        $this->db->select('id');
-        $this->db->select('nome');
+        $this->db->select('clientes.id');
+        $this->db->select('clientes.nome');
+        $this->db->select('grupos.nome as nome_grupo');
+        $this->db->join('grupos', 'grupos.id = clientes.id_grupo', 'left');
         $this->db->from('clientes'); // busca na tabela we_usuario
 
         if( $por_pagina ) {
@@ -62,8 +64,10 @@ class Clientes_model extends CI_Model {
 
     public function getObject( $id ){ // retorna um resumo dos usuarios vinculados/reporteres
 
-        $this->db->select('id');
-        $this->db->select('nome');
+        $this->db->select('clientes.id');
+        $this->db->select('clientes.nome');
+        $this->db->select('grupos.nome as nome_grupo');
+        $this->db->join('grupos', 'grupos.id = clientes.id_grupo', 'left');
         $this->db->where('clientes.id', $id);
         $this->db->from('clientes'); // busca na tabela we_usuario
 
@@ -98,6 +102,8 @@ class Clientes_model extends CI_Model {
 
         $this->form_validation->set_rules('nome', 'Nome', 'required|is_unique[clientes.nome]');
 
+        $this->form_validation->set_rules('grupo', 'Grupo', 'is_integer');
+
         if ($this->form_validation->run() == FALSE)
         {
             $res = array( // define a resposta
@@ -109,6 +115,7 @@ class Clientes_model extends CI_Model {
         {
             $data = array(
                 'nome' => $data['nome']
+                , 'id_grupo' => (isset($data['grupo']) && !empty($data['grupo'])) ? $data['grupo'] : null
             );
 
             $this->db->insert('clientes', $data); 

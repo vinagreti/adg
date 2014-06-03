@@ -135,6 +135,7 @@
                                 <li <?php if($this->router->fetch_class() == 'cofeebreak') echo 'class="active"'; ?>><a href="cofeebreak">Cofee break</a></li>
                                 <li <?php if($this->router->fetch_class() == 'contato') echo 'class="active"'; ?>><a href="contato">Fale conosco</a></li>
                                 <li <?php if($this->router->fetch_class() == 'clientes') echo 'class="active"'; ?>><a href="clientes">Clientes</a></li>
+                                <li <?php if($this->router->fetch_class() == 'grupos') echo 'class="active"'; ?>><a href="grupos">Grupos de clientes</a></li>
                                 <li <?php if($this->router->fetch_class() == 'fornecedores') echo 'class="active"'; ?>><a href="fornecedores">Fornecedores</a></li>
                                 <li <?php if($this->router->fetch_class() == 'produtos') echo 'class="active"'; ?>><a href="produtos">Produtos</a></li>
                                 <li <?php if($this->router->fetch_class() == 'lancamentos') echo 'class="active"'; ?>><a href="lancamentos">Lançamentos</a></li>
