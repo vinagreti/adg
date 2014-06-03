@@ -2,7 +2,7 @@
 
 class Produtos_model extends CI_Model {
 
-    public function resumo( $params = false, $pagina = false, $por_pagina = false, $retornarTotal = false, $contar = false ){ // retorna um resumo dos usuarios vinculados/reporteres
+    public function getObjects( $params = false, $pagina = false, $por_pagina = false, $retornarTotal = false, $contar = false ){ // retorna um resumo dos usuarios vinculados/reporteres
 
         if( !empty($params) ){
 
@@ -25,11 +25,10 @@ class Produtos_model extends CI_Model {
 
         }
 
-        if( $contar ){
-
+        if( $contar )
             $res = $this->db->count_all_results();
 
-        } else {
+        else {
 
             $resumo =  $this->db->get()->result(); // insere o resultado na variavel resumo
 
@@ -42,7 +41,7 @@ class Produtos_model extends CI_Model {
 
                 if( $retornarTotal ){
 
-                    $res["total"] = $this->resumo($params, false, false, false, true);
+                    $res["total"] = $this->getObjects($params, false, false, false, true);
 
                 }
 
@@ -61,7 +60,7 @@ class Produtos_model extends CI_Model {
 
     }
 
-    public function readObject( $id ){ // retorna um resumo dos usuarios vinculados/reporteres
+    public function getObject( $id ){ // retorna um resumo dos usuarios vinculados/reporteres
 
         $this->db->select('id');
         $this->db->select('nome');
@@ -91,14 +90,14 @@ class Produtos_model extends CI_Model {
 
     }
 
-    public function create( $data ){
+    public function postObject( $data ){
 
         // Form validation
         $this->load->helper('form');
 
         $this->load->library('form_validation');
 
-        $this->form_validation->set_rules('nome', 'Nome', 'required');
+        $this->form_validation->set_rules('nome', 'Nome', 'required|is_unique[produtos.nome]');
         $this->form_validation->set_rules('valor', 'Valor', 'is_numeric|required');
 
         if ($this->form_validation->run() == FALSE)

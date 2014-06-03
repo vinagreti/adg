@@ -2,7 +2,7 @@
 
 class Lancamentos_model extends CI_Model {
 
-    public function listObjects( $params = false, $pagina = false, $por_pagina = false, $retornarTotal = false, $contar = false ){ // retorna um resumo dos usuarios vinculados/reporteres
+    public function getObjects( $params = false, $pagina = false, $por_pagina = false, $retornarTotal = false, $contar = false ){ // retorna um resumo dos usuarios vinculados/reporteres
 
         $this->db->select('lancamentos.id as codigo');
         $this->db->select('lancamentos.tipo as tipo');
@@ -49,7 +49,7 @@ class Lancamentos_model extends CI_Model {
 
                 if( $retornarTotal ){
 
-                    $res["total"] = $this->listObjects($params, false, false, false, true);
+                    $res["total"] = $this->getObjects($params, false, false, false, true);
 
                 }
 
@@ -68,7 +68,7 @@ class Lancamentos_model extends CI_Model {
 
     }
 
-    public function readObject( $id ){ // retorna um resumo dos usuarios vinculados/reporteres
+    public function getObject( $id ){ // retorna um resumo dos usuarios vinculados/reporteres
 
         $this->db->select('lancamentos.id as codigo');
         $this->db->select('lancamentos.tipo as tipo');
@@ -112,7 +112,7 @@ class Lancamentos_model extends CI_Model {
 
     }
 
-    public function createObject( $data ){
+    public function postObject( $data ){
 
         // Form validation
         $this->load->helper('form');

@@ -13,14 +13,13 @@ class MY_Form_validation extends CI_Form_validation
      *
      * @return  array
      */
-    function error_array()
-    {
+    function error_array(){
+
         if (count($this->_error_array) === 0)
-        {
-                return FALSE;
-        }
-        else
-            return $this->_error_array;
+            return FALSE;
+            
+        return $this->_error_array;
  
     }
+
 }

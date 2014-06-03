@@ -4,22 +4,11 @@ class Clientes extends My_Controller {
 
     public function index() { $this->rest(); } // inicia o servidor RESTful definido em /application/core/MY_Controller.php
 
-    public function listObjects_html()
-    {
-
-        $javascript_files = array('third-party/bostable/bostable', 'third-party/typeahead/typeahead', 'third-party/typeahead/hogan');
-
-        $conteudo = $this->load->view('clientes/index', false, true);
-
-        $this->template->load('private', $conteudo, $javascript_files, null, null); // carrega a pagina inicial
-
-    }
-
-    public function listObjects_json(){
+    public function getObjects_json(){
 
         $this->load->model("clientes_model");
 
-        $carregarResumo = $this->clientes_model->resumo($_GET, false, false, true);
+        $carregarResumo = $this->clientes_model->getObjects($_GET, false, false, true);
 
         if( $carregarResumo["sucesso"] ){ // se a consulta ao banco for bem sucedida
 
@@ -35,45 +24,16 @@ class Clientes extends My_Controller {
 
         }
 
-        // usleep(rand(1000000,30000000));
-
         header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
 
         echo json_encode( $res ); // responde
     }
 
-    public function createTemplate(){
-
-        $this->load->view('clientes/createTemplate', false);
-
-    }
-
-    public function createObject( $data ){
+    public function getObject_json( $id ){
 
         $this->load->model("clientes_model");
 
-        $createObject = $this->clientes_model->create( $data );
-
-        if( $createObject['sucesso'] )
-            redirect(base_url().'clientes/?id='.$createObject['id']);
-
-        else{
-
-            header( "HTTP/1.0 400"); // seta o código e a mensagem de erro no cabeçalho da resposta
-
-            header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
-
-            echo json_encode( $createObject['error'] ); // responde
-
-        }
-
-    }
-
-    public function readObject_json( $id ){
-
-        $this->load->model("clientes_model");
-
-        $carregarObjecto = $this->clientes_model->readObject($id);
+        $carregarObjecto = $this->clientes_model->getObject($id);
 
         if( $carregarObjecto["sucesso"] ){ // se a consulta ao banco for bem sucedida
 
@@ -93,9 +53,47 @@ class Clientes extends My_Controller {
 
     }
 
-    public function readObject_html( $id ){
+    public function postObject( $data ){
 
-        $this->readObject_json( $id );
+        $this->load->model("clientes_model");
+
+        $createObject = $this->clientes_model->postObject( $data );
+
+        if( $createObject['sucesso'] )
+            redirect(base_url().'clientes/?id='.$createObject['id']);
+
+        else{
+
+            header( "HTTP/1.0 400"); // seta o código e a mensagem de erro no cabeçalho da resposta
+
+            header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
+
+            echo json_encode( $createObject['error'] ); // responde
+
+        }
+
+    }
+
+    public function getObjects_html()
+    {
+
+        $javascript_files = array('third-party/bostable/bostable', 'third-party/typeahead/typeahead', 'third-party/typeahead/hogan');
+
+        $conteudo = $this->load->view('clientes/index', false, true);
+
+        $this->template->load('private', $conteudo, $javascript_files, null, null); // carrega a pagina inicial
+
+    }
+
+    public function getObject_html( $id ){
+
+        $this->getObject_json( $id );
+
+    }
+
+    public function createTemplate(){
+
+        $this->load->view('clientes/createTemplate', false);
 
     }
 }
