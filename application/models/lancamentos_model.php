@@ -123,7 +123,7 @@ class Lancamentos_model extends CI_Model {
         $this->form_validation->set_rules('data_entrega', 'Entrega', 'required');
         $this->form_validation->set_rules('data_pagamento', 'Pagamento', 'required');
         $this->form_validation->set_rules('produto', 'Produto', 'integer|required');
-        $this->form_validation->set_rules('quantidade', 'Quantidade', 'integer|required');
+        $this->form_validation->set_rules('quantidade', 'Quantidade', 'is_numeric|required');
         $this->form_validation->set_rules('valor', 'Valor', 'is_numeric|required');
         $this->form_validation->set_rules('desconto', 'Desconto', 'is_numeric');
 
