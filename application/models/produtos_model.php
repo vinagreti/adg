@@ -7,13 +7,13 @@ class Produtos_model extends CI_Model {
         if( !empty($params) ){
 
             if(!empty($params['nome']))
-                $this->db->like('LOWER(nome)', strtolower($params['nome']));
+                $this->db->like('LOWER(produtos.nome)', strtolower($params['nome']));
 
         }
 
-        $this->db->select('id');
-        $this->db->select('nome');
-        $this->db->select('valor');
+        $this->db->select('produtos.id');
+        $this->db->select('produtos.nome');
+        $this->db->select('produtos.valor');
         $this->db->from('produtos'); // busca na tabela we_usuario
 
         if( $por_pagina ) {
@@ -62,9 +62,9 @@ class Produtos_model extends CI_Model {
 
     public function getObject( $id ){ // retorna um resumo dos usuarios vinculados/reporteres
 
-        $this->db->select('id');
-        $this->db->select('nome');
-        $this->db->select('valor');
+        $this->db->select('produtos.id');
+        $this->db->select('produtos.nome');
+        $this->db->select('produtos.valor');
         $this->db->where('produtos.id', $id);
         $this->db->from('produtos'); // busca na tabela we_usuario
 

@@ -7,12 +7,12 @@ class Fornecedores_model extends CI_Model {
         if( !empty($params) ){
 
             if(!empty($params['nome']))
-                $this->db->like('LOWER(nome)', strtolower($params['nome']));
+                $this->db->like('LOWER(fornecedores.nome)', strtolower($params['nome']));
 
         }
 
-        $this->db->select('id');
-        $this->db->select('nome');
+        $this->db->select('fornecedores.id');
+        $this->db->select('fornecedores.nome');
         $this->db->from('fornecedores'); // busca na tabela we_usuario
 
         if( $por_pagina ) {
@@ -62,8 +62,8 @@ class Fornecedores_model extends CI_Model {
 
     public function getObject( $id ){ // retorna um resumo dos usuarios vinculados/reporteres
 
-        $this->db->select('id');
-        $this->db->select('nome');
+        $this->db->select('fornecedores.id');
+        $this->db->select('fornecedores.nome');
         $this->db->where('fornecedores.id', $id);
         $this->db->from('fornecedores'); // busca na tabela we_usuario
 

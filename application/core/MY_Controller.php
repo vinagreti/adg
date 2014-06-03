@@ -54,7 +54,7 @@ class My_Controller extends CI_Controller{
 
             case 'DELETE': // no caso de uma requisição de tipo DELETE
 
-                $this->deleteObject( $this->input->get() ); // executa o método deleteObject($params);
+                $this->deleteObject( $this->input->get('id') ); // executa o método deleteObject($params);
 
             break;
 

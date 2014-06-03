@@ -33,17 +33,17 @@ class Lancamentos extends My_Controller {
 
         $this->load->model("lancamentos_model");
 
-        $carregarObjecto = $this->lancamentos_model->getObject($id);
+        $carregarObjeto = $this->lancamentos_model->getObject($id);
 
-        if( $carregarObjecto["sucesso"] ){ // se a consulta ao banco for bem sucedida
+        if( $carregarObjeto["sucesso"] ){ // se a consulta ao banco for bem sucedida
 
-            $res = $carregarObjecto["object"]; // insere o objeto na resposta
+            $res = $carregarObjeto["object"]; // insere o objeto na resposta
 
         } else { // se a consulta ao banco não for bem sucedida
 
-            $res = $carregarObjecto["msg"]; // mensagem de erro
+            $res = $carregarObjeto["msg"]; // mensagem de erro
 
-            header( "HTTP/1.0 400 ". utf8_decode( $carregarObjecto["msg"] ) ); // seta o código e a mensagem de erro no cabeçalho da resposta
+            header( "HTTP/1.0 400 ". utf8_decode( $carregarObjeto["msg"] ) ); // seta o código e a mensagem de erro no cabeçalho da resposta
 
         }
 
@@ -71,6 +71,30 @@ class Lancamentos extends My_Controller {
             echo json_encode( $createObject['error'] ); // responde
 
         }
+
+    }
+
+    public function deleteObject( $id ){
+
+        $this->load->model("lancamentos_model");
+
+        $deletarObjeto = $this->lancamentos_model->deleteObject($id);
+
+        if( $deletarObjeto["sucesso"] ){ // se a remoção for bem sucedida
+
+            $res = $deletarObjeto["msg"]; // mensagem de sucesso
+
+        } else { // se a remoção não for bem sucedida
+
+            $res = $deletarObjeto["msg"]; // mensagem de erro
+
+            header( "HTTP/1.0 400 ". utf8_decode( $deletarObjeto["msg"] ) ); // seta o código e a mensagem de erro no cabeçalho da resposta
+
+        }
+
+        header('Content-Type: application/json'); // define o tipo de conteúdo no cabeçalho da resposta
+
+        echo json_encode( $res ); // responde
 
     }
 

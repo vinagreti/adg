@@ -102,7 +102,9 @@
 
                     var form_url = $(this).attr('data-crud-drop');
 
-                    self.abrirDeleteForm( form_url );
+                    var object_id = $(this).parents('tr').attr('data-object-id')
+
+                    self.abrirDeleteForm( form_url, object_id );
 
                 });
 
@@ -111,7 +113,7 @@
 
             // APLICA OS GATILHOS NOS BOTOES DE AÇÕES DE CRUD DOS FORMULÁRIOS
             // ================================
-            function aplicarGatilhosForm( method ){
+            function aplicarGatilhosForm( method, object_id ){
 
                 tabela.find('[data-form-action*="close"]').unbind('click').on('click', function(){
 
@@ -127,22 +129,43 @@
 
                     var formData = $(this).serialize();
 
-                    $[method]( base_url_tabela, formData )
-                    .success(function( res ){
+                    var resource = base_url_tabela;
 
-                        pageData.push(res);
+                    if( object_id )
+                        resource += '?id='+object_id;
 
-                        tabela.html(self.tablePageContent);
+                    $.ajax({
+                        url: resource,
+                        type: method,
+                        data: formData,
+                        success: function(res) {
+                            pageData.push(res);
 
-                        inserirLinha( res );
+                            tabela.html(self.tablePageContent);
 
-                        aplicarGatilhosTabela();
+                            switch(method) {
+                                case 'get':
+                                    break;
+                                case 'post':
+                                    inserirLinha( res, 'prepend' );
+                                    break;
+                                case 'put':
+                                    break;
+                                case 'patch':
+                                    break;
+                                case 'delete':
+                                    removerLinha( object_id );
+                                    break;
+                            }
 
-                    }).fail(function( a, b, c ){
-                        if( a.responseJSON )
+                            aplicarGatilhosTabela();
+                        },
+                        fail: function(a, b, c) {
+                            if( a.responseJSON )
                             destacaCamposComProblemaEmForms( a.responseJSON );
 
-                        mostraErro( a.responseJSON );
+                            mostraErro( a.responseJSON );
+                        }
                     });
 
                     return false;
@@ -316,7 +339,7 @@
                 var linha = elementoLinha.clone();
 
                 // define o identificador da nova linha
-                linha.attr("id", objeto.id );
+                linha.attr("data-object-id", objeto.id );
 
                 // para cada atributo do objeto
                 $.each( objeto, function( attribute, value ){
@@ -370,7 +393,7 @@
             function removerLinha( id ){
 
                 // instancia a linha da tabela
-                var linha = tabela.find( "#" + id );
+                var linha = tabela.find( '[data-object-id='+id+']' );
 
                 // insere um efeito na linha
                 linha.addClass("danger");
@@ -457,13 +480,13 @@
             }
             self.limpar = limpar;
 
-            function showForm( method ){
+            function showForm( method, object_id ){
 
                 self.tablePageContent = tabela.html();
 
                 tabela.html(self[method+'Form'].clone());
 
-                aplicarGatilhosForm( method );
+                aplicarGatilhosForm( method, object_id );
 
             }
 
@@ -543,7 +566,7 @@
 
             // ABRE O FORMULÁRIO PARA REMOÇÃO DE UM ITEM
             // ================================
-            function abrirDeleteForm( form_url ){
+            function abrirDeleteForm( form_url, object_id ){
 
                 if( ! self.deleteForm ){
 
@@ -552,7 +575,7 @@
 
                         self.deleteForm = $(form);
 
-                        showForm( 'delete' );
+                        showForm( 'delete', object_id );
 
                     })
                     .fail(function(res){
@@ -560,7 +583,7 @@
                     });
 
                 } else
-                    showForm( 'delete' );
+                    showForm( 'delete', object_id );
 
             }
             self.abrirDeleteForm = abrirDeleteForm;

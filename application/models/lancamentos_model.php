@@ -4,7 +4,7 @@ class Lancamentos_model extends CI_Model {
 
     public function getObjects( $params = false, $pagina = false, $por_pagina = false, $retornarTotal = false, $contar = false ){ // retorna um resumo dos usuarios vinculados/reporteres
 
-        $this->db->select('lancamentos.id as codigo');
+        $this->db->select('lancamentos.id');
         $this->db->select('lancamentos.tipo as tipo');
         $this->db->select("DATE_FORMAT(data, '%d-%m-%Y') as data", FALSE);
         $this->db->select('TRUNCATE(lancamentos.valor,2) as valor_cobrado', FALSE);
@@ -70,7 +70,7 @@ class Lancamentos_model extends CI_Model {
 
     public function getObject( $id ){ // retorna um resumo dos usuarios vinculados/reporteres
 
-        $this->db->select('lancamentos.id as codigo');
+        $this->db->select('lancamentos.id');
         $this->db->select('lancamentos.tipo as tipo');
         $this->db->select("DATE_FORMAT(data, '%d-%m-%Y') as data", FALSE);
         $this->db->select('TRUNCATE(lancamentos.valor,2) as valor_cobrado', FALSE);
@@ -133,9 +133,7 @@ class Lancamentos_model extends CI_Model {
                 "sucesso" => false // define como sucesso
                 , "error" => $this->form_validation->error_array() // insre o resumo
             );
-        }
-        else
-        {
+        } else {
             $data = array(
                 'tipo' => $data['tipo']
                 , 'data_entrega' => $data['data_entrega']
@@ -164,4 +162,24 @@ class Lancamentos_model extends CI_Model {
 
     }
 
+    public function deleteObject( $id ){
+
+        $this->db->where('id', $id); // remove o usuario do banco
+        $removido = $this->db->delete('lancamentos');
+
+        if($removido){
+            $res = array( // define a resposta
+                "sucesso" => true // define como sucesso
+                , "msg" => 'Lançamento removido com sucesso' // insre o resumo
+            );
+        } else {
+            $res = array( // define a resposta
+                "sucesso" => false // define como falha
+                , "msg" => 'Problema ao remover lançamento. Tente novamente mais tarde.' // insre o resumo
+            );
+        }
+
+        return $res;
+
+    }
 }

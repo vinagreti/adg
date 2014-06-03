@@ -7,12 +7,12 @@ class Clientes_model extends CI_Model {
         if( !empty($params) ){
 
             if(!empty($params['nome']))
-                $this->db->like('LOWER(nome)', strtolower($params['nome']));
+                $this->db->like('LOWER(clientes.nome)', strtolower($params['nome']));
 
         }
 
-        $this->db->select('clientes.id');
-        $this->db->select('clientes.nome');
+        $this->db->select('clientes.id as id');
+        $this->db->select('clientes.nome as nome');
         $this->db->select('grupos.nome as nome_grupo');
         $this->db->join('grupos', 'grupos.id = clientes.id_grupo', 'left');
         $this->db->from('clientes'); // busca na tabela we_usuario

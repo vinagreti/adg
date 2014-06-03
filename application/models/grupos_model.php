@@ -7,12 +7,12 @@ class Grupos_model extends CI_Model {
         if( !empty($params) ){
 
             if(!empty($params['nome']))
-                $this->db->like('LOWER(nome)', strtolower($params['nome']));
+                $this->db->like('LOWER(grupos.nome)', strtolower($params['nome']));
 
         }
 
-        $this->db->select('id');
-        $this->db->select('nome');
+        $this->db->select('grupos.id');
+        $this->db->select('grupos.nome');
         $this->db->from('grupos'); // busca na tabela we_usuario
 
         if( $por_pagina ) {
@@ -62,8 +62,8 @@ class Grupos_model extends CI_Model {
 
     public function getObject( $id ){ // retorna um resumo dos usuarios vinculados/reporteres
 
-        $this->db->select('id');
-        $this->db->select('nome');
+        $this->db->select('grupos.id');
+        $this->db->select('grupos.nome');
         $this->db->where('grupos.id', $id);
         $this->db->from('grupos'); // busca na tabela we_usuario
 
