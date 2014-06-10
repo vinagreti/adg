@@ -86,7 +86,9 @@
 
                     var form_url = $(this).attr('data-crud-update');
 
-                    self.abrirPatchForm( form_url );
+                    var object_id = $(this).parents('tr').attr('data-object-id');
+
+                    self.abrirPatchForm( form_url, object_id );
 
                 });
 
@@ -94,7 +96,9 @@
 
                     var form_url = $(this).attr('data-crud-read');
 
-                    self.abrirGetForm( form_url );
+                    var object_id = $(this).parents('tr').attr('data-object-id');
+
+                    self.abrirGetForm( form_url, object_id );
 
                 });
 
@@ -161,11 +165,17 @@
                             aplicarGatilhosTabela();
                         },
                         fail: function(a, b, c) {
-                            if( a.responseJSON )
-                            destacaCamposComProblemaEmForms( a.responseJSON );
 
-                            mostraErro( a.responseJSON );
+                            if( a.responseJSON ){
+
+                                destacaCamposComProblemaEmForms( a.responseJSON );
+
+                                mostraErro( a.responseJSON );
+
+                            }
+
                         }
+
                     });
 
                     return false;
@@ -486,7 +496,35 @@
 
                 tabela.html(self[method+'Form'].clone());
 
-                aplicarGatilhosForm( method, object_id );
+                if( method == 'get' || method == 'patch' ){
+
+                    $.get( base_url_tabela+'?id='+object_id )
+                    .success(function(res){
+
+                        preencherForm( res );
+
+                        aplicarGatilhosForm( method, object_id );
+
+                    })
+                    .fail(function(res, b, c){
+
+                        mostraErro( res );
+
+                    });
+
+                }
+                else
+                    aplicarGatilhosForm( method, object_id );
+
+            }
+
+            function preencherForm( object ){
+
+                $.each(object, function(attrib, value){
+
+                    tabela.find('.'+attrib).html(value);
+
+                })
 
             }
 
@@ -527,7 +565,7 @@
 
                         self.patchForm = $(form);
 
-                        showForm( 'patch' );
+                        showForm( 'patch', object_id );
 
                     })
                     .fail(function(res){
@@ -535,14 +573,14 @@
                     });
 
                 } else
-                    showForm( 'patch' );
+                    showForm( 'patch', object_id );
 
             }
             self.abrirPatchForm = abrirPatchForm;
 
             // ABRE O FORMULÁRIO PARA VISUALIZAÇÃO DE UM ITEM
             // ================================
-            function abrirGetForm( form_url ){
+            function abrirGetForm( form_url, object_id ){
 
                 if( ! self.getForm ){
 
@@ -551,7 +589,7 @@
 
                         self.getForm = $(form);
 
-                        showForm( 'get' );
+                        showForm( 'get', object_id );
 
                     })
                     .fail(function(res){
@@ -559,7 +597,7 @@
                     });
 
                 } else
-                    showForm( 'get' );
+                    showForm( 'get', object_id );
 
             }
             self.abrirGetForm = abrirGetForm;

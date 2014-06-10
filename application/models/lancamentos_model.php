@@ -71,9 +71,13 @@ class Lancamentos_model extends CI_Model {
     public function getObject( $id ){ // retorna um resumo dos usuarios vinculados/reporteres
 
         $this->db->select('lancamentos.id');
-        $this->db->select('lancamentos.tipo as tipo');
+        $this->db->select("REPLACE( REPLACE(UPPER(lancamentos.tipo), 'C', 'Crédito') , 'D', 'Débito') as tipo", FALSE);
         $this->db->select("DATE_FORMAT(data, '%d-%m-%Y') as data", FALSE);
-        $this->db->select('TRUNCATE(lancamentos.valor,2) as valor_cobrado', FALSE);
+        $this->db->select("REPLACE( REPLACE(lancamentos.entregue, '1', 'Entregue') , '0', 'Não entregue') as entregue", FALSE);
+        $this->db->select("DATE_FORMAT(data_entrega, '%d-%m-%Y') as data_entrega", FALSE);
+        $this->db->select("REPLACE( REPLACE(lancamentos.realizado, '1', 'Realizado') , '0', 'Não realizado') as realizado", FALSE);
+        $this->db->select("DATE_FORMAT(data_pagamento, '%d-%m-%Y') as data_pagamento", FALSE);
+        $this->db->select('TRUNCATE(lancamentos.valor,2) as valor', FALSE);
         $this->db->select('TRUNCATE((produtos.valor*quantidade),2) as valor_estimado', FALSE);
         $this->db->select('lancamentos.desc as descricao');
         $this->db->select("TRUNCATE(lancamentos.desconto,2) as desconto", FALSE);
@@ -81,6 +85,7 @@ class Lancamentos_model extends CI_Model {
         $this->db->select('lancamentos.quantidade');
         $this->db->select('clientes.nome as cliente');
         $this->db->select('produtos.nome as produto');
+        $this->db->select('produtos.valor as preco_produto');
         $this->db->select('TRUNCATE(produtos.valor,2) as valor_unidade', FALSE);
         $this->db->select('fornecedores.nome as fornecedor');
         $this->db->join('produtos', 'produtos.id = lancamentos.id_produto', 'left');
@@ -144,8 +149,8 @@ class Lancamentos_model extends CI_Model {
                 , 'quantidade' => $data['quantidade']
                 , 'valor' => $data['valor']
                 , 'desc' => $data['desc']
-                , 'entregue' => isset($data['entregue']) ? $data['entregue'] : 0
-                , 'realizado' => isset($data['realizado']) ? $data['realizado'] : 0
+                , 'entregue' => isset($data['entregue']) ? 1 : 0
+                , 'realizado' => isset($data['realizado']) ? 1 : 0
             );
 
             $this->db->insert('lancamentos', $data); 

@@ -42,7 +42,7 @@
     <div class="col-sm-3">
       <div class="checkbox">
         <label>
-          <input type="checkbox" name="pago"> Pagamento realizado
+          <input type="checkbox" name="realizado"> Pagamento realizado
         </label>
       </div>
     </div>
